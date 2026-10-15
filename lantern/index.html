@@ -1,0 +1,1891 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>ふらりランタン</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=M+PLUS+Rounded+1c:wght@700;800&display=swap">
+<style>
+/* Layout: スマホ1列のゲームブック — ふらりの紫の表紙 → きょうの灯り（ランタンと記録ボタン）→ 地下へ続くダンジョン（階ごとに3つの扉、1部屋で次の階）→ ふりかえり7日 → つらいときは → きろくの保存 */
+:root {
+  --bg: #eceef8;
+  --surface: #ffffff;
+  --surface-2: #f4f4fc;
+  --fg: #262a45;
+  --muted: #5b6080;
+  --line: #d9dcef;
+  --accent: #667eea;
+  --accent-ink: #4c57c9;
+  --accent-fill: #5a67d8;
+  --accent-tint: #eef0ff;
+  --on-accent: #ffffff;
+  --ok-ink: #17744c;
+  --ok-tint: #e4f4ec;
+  --warn-ink: #7a4d00;
+  --warn-tint: #fff3d4;
+  --bad-ink: #b3261e;
+  --bad-tint: #fdecea;
+  --stamp: #d8433f;
+  --link: #1f4fd1;
+  --hero-a: #667eea;
+  --hero-b: #764ba2;
+  --hero-shade: rgba(18, 14, 58, 0.18);
+  --on-hero: #ffffff;
+  --hero-soft: rgba(255, 255, 255, 0.14);
+  --hero-line: rgba(255, 255, 255, 0.55);
+  --chip-on-bg: #ffffff;
+  --chip-on-fg: #3d47b5;
+  --lamp: #f0a531;
+  --lamp-core: #fff1b8;
+  --lamp-ink: #8a5300;
+  --lamp-tint: #fff4dc;
+  --lamp-line: #e2ad52;
+  --lamp-body: #fffaf0;
+  --cave: #1b1c38;
+  --cave-2: #25274b;
+  --cave-line: #3e4178;
+  --cave-fg: #eeeeff;
+  --cave-muted: #b9bbe0;
+  --cave-glow: rgba(255, 218, 160, 0.15);
+  --rec-glow: rgba(255, 191, 77, 0.45);
+  --cave-band: rgba(255, 255, 255, 0.05);
+  --door: #2b2e5c;
+  --door-open: #393d7e;
+  --cave-stamp: #ff8a80;
+  --mone-pink: #e2559a;
+  --sensor: #fff3fa;
+  --sensor-glow: #ff5fb1;
+  --sensor-rod: #a9aebb;
+  --shadow: 0 10px 40px rgba(38, 42, 69, 0.10);
+  --scrim: rgba(16, 17, 38, 0.55);
+  --focus: #4c57c9;
+
+  --font-display: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Segoe UI", sans-serif;
+  --font-body: "BIZ UDPGothic", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Segoe UI", "Yu Gothic UI", "Meiryo", sans-serif;
+
+  --radius: 15px;
+  --radius-s: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #13142a;
+    --surface: #1c1e38;
+    --surface-2: #24274a;
+    --fg: #e9eaf7;
+    --muted: #a7abcb;
+    --line: #34385e;
+    --accent: #8a98ff;
+    --accent-ink: #aeb7ff;
+    --accent-fill: #7f8cf0;
+    --accent-tint: #25295a;
+    --on-accent: #10122a;
+    --ok-ink: #7bdcaa;
+    --ok-tint: #173a2b;
+    --warn-ink: #ffd58a;
+    --warn-tint: #3a2f12;
+    --bad-ink: #ffb4ab;
+    --bad-tint: #3d1c1c;
+    --stamp: #ff7f78;
+    --link: #9dbaff;
+    --hero-a: #5563d6;
+    --hero-b: #6a3f96;
+    --hero-shade: rgba(0, 0, 0, 0.10);
+    --lamp: #ffbf4d;
+    --lamp-core: #fff3c4;
+    --lamp-ink: #ffd58a;
+    --lamp-tint: #3a2f12;
+    --lamp-line: #a8792b;
+    --lamp-body: #2e2a1c;
+    --cave: #0f1024;
+    --cave-2: #1a1c3a;
+    --cave-line: #33366a;
+    --door: #232653;
+    --door-open: #30346f;
+    --shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+    --scrim: rgba(0, 0, 0, 0.6);
+    --focus: #aeb7ff;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #13142a;
+  --surface: #1c1e38;
+  --surface-2: #24274a;
+  --fg: #e9eaf7;
+  --muted: #a7abcb;
+  --line: #34385e;
+  --accent: #8a98ff;
+  --accent-ink: #aeb7ff;
+  --accent-fill: #7f8cf0;
+  --accent-tint: #25295a;
+  --on-accent: #10122a;
+  --ok-ink: #7bdcaa;
+  --ok-tint: #173a2b;
+  --warn-ink: #ffd58a;
+  --warn-tint: #3a2f12;
+  --bad-ink: #ffb4ab;
+  --bad-tint: #3d1c1c;
+  --stamp: #ff7f78;
+  --link: #9dbaff;
+  --hero-a: #5563d6;
+  --hero-b: #6a3f96;
+  --hero-shade: rgba(0, 0, 0, 0.10);
+  --lamp: #ffbf4d;
+  --lamp-core: #fff3c4;
+  --lamp-ink: #ffd58a;
+  --lamp-tint: #3a2f12;
+  --lamp-line: #a8792b;
+  --lamp-body: #2e2a1c;
+  --cave: #0f1024;
+  --cave-2: #1a1c3a;
+  --cave-line: #33366a;
+  --door: #232653;
+  --door-open: #30346f;
+  --shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+  --scrim: rgba(0, 0, 0, 0.6);
+  --focus: #aeb7ff;
+  color-scheme: dark;
+}
+
+html.fs-l { font-size: 118.75%; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  -webkit-font-smoothing: antialiased;
+}
+.page { padding-block: 20px 48px; padding-inline: 16px; }
+.app {
+  max-width: 720px;
+  margin: 0 auto;
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+button { font: inherit; color: inherit; }
+button rt { color: inherit; }
+ruby { ruby-position: over; }
+rt { font-size: .52em; font-weight: 700; color: var(--muted); letter-spacing: 0; }
+.no-ruby rt { display: none; }
+.yasashii { line-height: 2.1; }
+.no-ruby .yasashii { line-height: 1.85; }
+h2, h3 { text-wrap: balance; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+/* 表紙 */
+.hero {
+  color: var(--on-hero);
+  background:
+    linear-gradient(var(--hero-shade), var(--hero-shade)),
+    linear-gradient(135deg, var(--hero-a) 0%, var(--hero-b) 100%);
+  padding: clamp(22px, 5vw, 40px) clamp(16px, 5vw, 36px) clamp(18px, 4vw, 28px);
+}
+.hero :focus-visible { outline-color: var(--on-hero); }
+.hero rt { color: inherit; opacity: .9; }
+.hero-eyebrow { margin: 0; font-size: .85rem; font-weight: 700; letter-spacing: .06em; }
+.hero-title {
+  margin: .1rem 0 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2rem, 9vw, 3rem);
+  line-height: 1.2;
+  letter-spacing: .03em;
+}
+.hero-lead { margin: .5rem 0 0; font-size: clamp(1rem, 3.6vw, 1.15rem); font-weight: 700; }
+.hero-tools { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1.2rem; margin-top: 1rem; }
+.seg { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; }
+.seg-label { font-size: .85rem; font-weight: 700; margin-right: .15rem; }
+.seg-btn {
+  min-height: 44px;
+  padding: .2rem .9rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--hero-line);
+  background: var(--hero-soft);
+  color: var(--on-hero);
+  font-size: .9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.seg-btn[aria-pressed="true"] { background: var(--chip-on-bg); color: var(--chip-on-fg); border-color: var(--chip-on-bg); }
+.hero-help {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--on-hero);
+  font-size: .9rem;
+  font-weight: 700;
+  text-underline-offset: 4px;
+}
+
+/* セクション共通 */
+.sec { padding: clamp(20px, 4.5vw, 32px) clamp(16px, 4.5vw, 32px); border-top: 1px solid var(--line); }
+.sec:first-of-type { border-top: 0; }
+.sec-h { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 1.35rem; line-height: 1.8; }
+.sec-note { margin: .4rem 0 0; color: var(--muted); font-size: .95rem; }
+
+/* きょうの灯り */
+.today-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0 1rem; }
+.today-date { margin: 0; color: var(--muted); font-weight: 700; font-variant-numeric: tabular-nums; }
+.lamp-row { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); align-items: center; gap: .5rem 1.1rem; margin-top: .6rem; }
+.lamp svg { display: block; width: 100%; height: auto; overflow: visible; }
+.lamp-count { margin: 0; font-weight: 700; color: var(--muted); }
+.lamp-count strong { color: var(--fg); font-family: var(--font-display); font-size: 2.6rem; line-height: 1.1; font-variant-numeric: tabular-nums; margin-right: .2rem; }
+.lamp-rank { margin: .2rem 0 0; font-weight: 700; }
+.lamp-rank .rank-name { color: var(--lamp-ink); }
+.lamp-next { margin: .1rem 0 0; color: var(--muted); font-size: .9rem; }
+.lamp-msg { margin: .5rem 0 0; padding: .45rem .8rem; border-radius: var(--radius-s); background: var(--lamp-tint); font-weight: 700; font-size: .98rem; }
+
+.rhythm { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; gap: .5rem; }
+.rhythm li { min-width: 0; }
+.rhythm li.rest-row { margin-top: .5rem; }
+.rh-btn {
+  width: 100%;
+  min-height: 58px;
+  padding: .35rem .9rem .35rem .6rem;
+  border-radius: 14px;
+  border: 2px solid var(--line);
+  background: var(--surface);
+  display: grid;
+  grid-template-columns: 2.4rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: .7rem;
+  text-align: left;
+  font-weight: 700;
+  line-height: 1.7;
+  cursor: pointer;
+  transition: background-color .15s, border-color .15s, transform .1s;
+}
+.rh-btn:hover { border-color: var(--lamp-line); }
+.rh-btn:active { transform: translateY(1px); }
+.rh-ic { width: 2.4rem; height: 2.4rem; display: grid; place-items: center; border-radius: 50%; background: var(--surface-2); color: var(--muted); }
+.rh-ic svg { width: 1.4rem; height: 1.4rem; }
+.rh-text { min-width: 0; }
+.rh-time { color: var(--muted); font-size: .9rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.rh-plus { padding: 0 .55rem; border-radius: 999px; border: 1.5px dashed var(--line); font-size: .8rem; }
+.rh-btn[aria-pressed="true"] { border-color: var(--lamp-line); background: var(--lamp-tint); }
+.rh-btn[aria-pressed="true"] .rh-ic { background: var(--lamp); color: var(--cave); }
+.rh-btn[aria-pressed="true"] .rh-time { color: var(--lamp-ink); font-family: var(--font-display); font-size: 1.05rem; font-weight: 800; }
+.rh-btn.just-lit .rh-ic { animation: pop .45s cubic-bezier(.2, 1.6, .4, 1); }
+.rh-rest[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-tint); }
+.rh-rest[aria-pressed="true"] .rh-ic { background: var(--accent-fill); color: var(--on-accent); }
+.rh-rest[aria-pressed="true"] .rh-time { color: var(--accent-ink); }
+.rest-k { margin: 0 0 .3rem; color: var(--muted); font-size: .88rem; font-weight: 700; }
+.wake-edit { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .6rem; margin-top: .2rem; padding-left: .3rem; }
+.link-btn {
+  min-height: 44px;
+  padding: .3rem 0;
+  border: 0;
+  background: none;
+  color: var(--link);
+  font-size: .92rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.time-in {
+  min-height: 44px;
+  padding: .2rem .6rem;
+  border-radius: 10px;
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  color: var(--fg);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+}
+.small-btn {
+  min-height: 44px;
+  padding: .2rem 1rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--accent-fill);
+  background: var(--accent-fill);
+  color: var(--on-accent);
+  font-size: .92rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.small-btn.ghost { background: var(--surface); color: var(--accent-ink); }
+
+.next-room {
+  margin-top: 1rem;
+  padding: .8rem 1rem;
+  border-radius: 14px;
+  background: var(--cave);
+  color: var(--cave-fg);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .6rem 1rem;
+}
+.next-room rt { color: var(--cave-muted); }
+.next-room p { margin: 0; }
+.next-room .say { flex: 1 1 15rem; min-width: 0; }
+.next-k { display: block; color: var(--cave-muted); font-size: .85rem; font-weight: 700; }
+.next-name { display: block; font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; line-height: 1.7; }
+.go-btn {
+  min-height: 48px;
+  padding: .3rem 1.3rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--lamp);
+  color: var(--cave);
+  font-weight: 800;
+  cursor: pointer;
+}
+.next-room :focus-visible { outline-color: var(--lamp); }
+
+/* ダンジョン */
+.cave {
+  --reach: 40%;
+  background:
+    radial-gradient(130% var(--reach) at 50% 0%, var(--cave-glow) 0%, transparent 100%),
+    var(--cave);
+  color: var(--cave-fg);
+  padding: clamp(22px, 5vw, 34px) clamp(16px, 4.5vw, 32px) clamp(26px, 5vw, 38px);
+  border-top: 0;
+}
+.cave rt { color: var(--cave-muted); }
+.cave :focus-visible { outline-color: var(--lamp); }
+.cave-eyebrow { margin: 0; color: var(--lamp); font-size: .85rem; font-weight: 700; letter-spacing: .08em; }
+.cave .sec-h { color: var(--cave-fg); }
+.cave-lead { margin: .4rem 0 0; color: var(--cave-muted); font-size: .95rem; }
+.floors { list-style: none; margin: 1.3rem 0 0; padding: 0 0 0 1.4rem; position: relative; display: grid; gap: 1.1rem; }
+.floors::before { content: ""; position: absolute; left: .45rem; top: .6rem; bottom: .6rem; border-left: 2px dashed var(--cave-line); }
+.floor { position: relative; padding: .8rem .9rem 1rem; border-radius: var(--radius); background: var(--cave-2); border: 1px solid var(--cave-line); min-width: 0; }
+.floor::before {
+  content: "";
+  position: absolute;
+  left: calc(-1.4rem + .1rem);
+  top: 1.2rem;
+  width: .75rem;
+  height: .75rem;
+  border-radius: 50%;
+  background: var(--lamp);
+  box-shadow: 0 0 0 4px var(--cave);
+}
+.floor.is-locked::before { background: var(--cave-line); }
+.floor.is-locked { background: transparent; border-style: dashed; }
+.floor-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: .2rem .7rem; }
+.floor-no { font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; color: var(--lamp); font-variant-numeric: tabular-nums; }
+.floor.is-locked .floor-no { color: var(--cave-muted); }
+.floor-name { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; line-height: 1.7; }
+.floor-sub { margin: 0; color: var(--cave-muted); font-size: .88rem; line-height: 1.8; }
+.floor-count { padding: 0 .6rem; border-radius: 999px; background: var(--door); color: var(--cave-muted); font-size: .82rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.floor-count.is-full { background: var(--lamp); color: var(--cave); }
+.floor-lock { margin: .4rem 0 0; color: var(--cave-muted); font-size: .9rem; }
+.doors { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; margin-top: .7rem; }
+.door {
+  position: relative;
+  min-width: 0;
+  min-height: 7.6rem;
+  padding: 0 0 .3rem;
+  border: 0;
+  background: none;
+  color: var(--cave-fg);
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: .3rem;
+  cursor: pointer;
+}
+.door-arch {
+  position: relative;
+  width: min(100%, 4.6rem);
+  aspect-ratio: 4 / 5;
+  max-width: 100%;
+  border-radius: 999px 999px 8px 8px;
+  border: 2px solid var(--cave-line);
+  background: var(--door);
+  display: grid;
+  place-items: center;
+  color: var(--cave-muted);
+  transition: border-color .15s, background-color .15s, transform .15s;
+}
+.door-arch > svg { width: 46%; height: auto; }
+.door:not(:disabled):hover .door-arch { border-color: var(--lamp); transform: translateY(-2px); }
+.door:not(:disabled) .door-arch { background: var(--door-open); border-color: var(--lamp-line); color: var(--lamp); }
+.door.is-clear .door-arch { background: var(--lamp-body); border-color: var(--lamp); }
+.door.is-clear .door-arch > svg { width: 82%; }
+.door .hanamaru path { stroke: var(--stamp); }
+.door-star { position: absolute; right: -.35rem; top: -.35rem; width: 1.5rem; height: 1.5rem; display: grid; place-items: center; border-radius: 50%; background: var(--lamp); color: var(--cave); font-size: .8rem; font-weight: 800; line-height: 1; }
+.door-name { font-size: .85rem; font-weight: 700; line-height: 1.75; text-align: center; overflow-wrap: anywhere; }
+.door:disabled { cursor: default; opacity: .55; }
+.door-rec {
+  position: absolute;
+  z-index: 1;
+  top: -.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0 .5rem;
+  border-radius: 999px;
+  background: var(--lamp);
+  color: var(--cave);
+  font-size: .72rem;
+  font-weight: 800;
+  line-height: 1.7;
+  white-space: nowrap;
+}
+.door.is-rec .door-arch { border-color: var(--lamp); box-shadow: 0 0 0 2px var(--lamp), 0 0 22px var(--rec-glow); }
+.floor-count svg { display: block; width: 1rem; height: 1rem; margin: .25rem 0; }
+
+/* ふりかえり */
+.week-strip { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: .3rem; margin-top: .9rem; }
+.wday { min-width: 0; display: grid; justify-items: center; gap: .15rem; padding: .45rem .1rem .5rem; border-radius: 12px; background: var(--surface-2); }
+.wday.is-today { background: var(--lamp-tint); box-shadow: inset 0 0 0 2px var(--lamp-line); }
+.wd-name { font-size: .8rem; font-weight: 700; color: var(--muted); }
+.wd-date { font-family: var(--font-display); font-weight: 800; font-size: 1rem; line-height: 1.3; font-variant-numeric: tabular-nums; }
+.wd-dots { display: grid; grid-template-columns: repeat(2, .55rem); gap: .2rem; min-height: 1.95rem; align-content: start; margin-top: .15rem; }
+.wd-dot { width: .55rem; height: .55rem; border-radius: 50%; background: var(--lamp); }
+.wd-dot.is-rest { background: var(--accent-fill); }
+.wd-wake { font-size: .74rem; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; line-height: 1.5; }
+.week-key { display: flex; flex-wrap: wrap; gap: .3rem 1rem; margin: .55rem 0 0; color: var(--muted); font-size: .85rem; }
+.week-key span { display: inline-flex; align-items: center; gap: .35rem; }
+.week-key i { display: inline-block; width: .6rem; height: .6rem; border-radius: 50%; background: var(--lamp); }
+.week-key i.is-rest { background: var(--accent-fill); }
+.wake-fig { margin: 1.1rem 0 0; padding: .8rem .9rem .6rem; border-radius: var(--radius-s); border: 1.5px solid var(--line); }
+.wake-fig figcaption { font-weight: 800; font-size: .98rem; }
+.wake-fig svg { display: block; width: 100%; height: auto; margin-top: .3rem; }
+.wake-empty { margin: .3rem 0 .2rem; color: var(--muted); font-size: .92rem; }
+.ax-t { fill: var(--muted); font: 700 11px var(--font-body); }
+.ax-g { stroke: var(--line); stroke-width: 1; }
+.wk-line { fill: none; stroke: var(--lamp-line); stroke-width: 2; }
+.wk-dot { fill: var(--lamp); stroke: var(--surface); stroke-width: 2; }
+.wk-lb { fill: var(--fg); font: 700 11px var(--font-body); }
+.totals { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; margin: 1rem 0 0; }
+.totals div { padding: .5rem .8rem; border-radius: var(--radius-s); background: var(--surface-2); min-width: 0; }
+.totals dt { color: var(--muted); font-size: .85rem; font-weight: 700; }
+.totals dd { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 1.25rem; font-variant-numeric: tabular-nums; }
+.titles-h { margin: 1rem 0 .3rem; font-weight: 800; font-size: .98rem; }
+.class-prog { list-style: none; margin: 0; padding: 0; display: grid; gap: .45rem; }
+.cp-row { display: grid; grid-template-columns: 7.2rem minmax(0, 1fr) auto; align-items: center; gap: .7rem; min-width: 0; }
+.cp-name { font-weight: 700; font-size: .92rem; }
+.cp-bar { display: block; height: .7rem; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); overflow: hidden; }
+.cp-fill { display: block; height: 100%; border-radius: 999px; background: var(--lamp); }
+.cp-val { font-weight: 800; font-size: .9rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cp-row.is-full .cp-val { color: var(--lamp-ink); }
+
+/* ダンジョンのクラス見出し */
+.floors > .class-head {
+  margin-left: -1.4rem;
+  padding: .75rem .9rem .8rem;
+  border-radius: var(--radius);
+  background: linear-gradient(var(--cave-band), var(--cave-band)), var(--cave);
+  border: 1px solid var(--cave-line);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: .3rem .8rem;
+  position: relative;
+  z-index: 1;
+}
+.floors > .class-head:not(:first-child) { margin-top: .8rem; }
+.class-k { margin: 0; color: var(--lamp); font-size: .82rem; font-weight: 700; letter-spacing: .04em; }
+.class-name { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 1.25rem; line-height: 1.7; }
+.class-goal { margin: 0; color: var(--cave-muted); font-size: .88rem; line-height: 1.9; }
+.class-count { padding: 0 .7rem; border-radius: 999px; background: var(--door); color: var(--cave-fg); font-size: .85rem; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.class-head.is-full .class-count { background: var(--lamp); color: var(--cave); }
+.titles { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .4rem; }
+.titles li { padding: 0 .85rem; border-radius: 999px; border: 1.5px dashed var(--line); color: var(--muted); font-weight: 700; line-height: 2.2; font-size: .92rem; }
+.titles li.is-got { border-style: solid; border-color: var(--lamp-line); background: var(--lamp-tint); color: var(--lamp-ink); }
+
+/* つらいときは */
+.tsurai { background: var(--surface-2); }
+.help-list { list-style: none; margin: .9rem 0 0; padding: 0; display: grid; gap: .6rem; }
+.help-list li { padding: .7rem .95rem; border-radius: 12px; border: 1.5px solid var(--line); background: var(--surface); min-width: 0; }
+.help-name { margin: 0; font-weight: 800; }
+.help-desc { margin: .1rem 0 0; color: var(--muted); font-size: .92rem; }
+.help-num { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .8rem; margin-top: .3rem; }
+.help-num strong { font-family: var(--font-display); font-size: 1.35rem; font-variant-numeric: tabular-nums; user-select: all; }
+.help-list a { color: var(--link); font-weight: 700; text-underline-offset: 3px; }
+.help-note { margin: .9rem 0 0; padding: .6rem .9rem; border-left: 4px solid var(--accent-fill); border-radius: 0 var(--radius-s) var(--radius-s) 0; background: var(--surface); font-size: .95rem; }
+.copy-btn {
+  min-height: 40px;
+  padding: .1rem .9rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--line);
+  background: var(--surface-2);
+  font-size: .85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* きろくの保存 */
+.store-where { margin: .5rem 0 0; padding: .55rem .9rem; border-radius: var(--radius-s); background: var(--surface-2); font-weight: 700; }
+.backup { margin-top: .8rem; border: 1.5px solid var(--line); border-radius: 12px; }
+.backup summary { min-height: 48px; display: flex; align-items: center; padding: .3rem 1rem; color: var(--accent-ink); font-weight: 700; cursor: pointer; }
+.backup[open] summary { border-bottom: 1px solid var(--line); }
+.backup-body { padding: .7rem 1rem 1rem; display: grid; gap: .7rem; }
+.backup-body p { margin: 0; font-size: .95rem; }
+.backup-row { display: flex; flex-wrap: wrap; gap: .5rem; }
+.code-area {
+  width: 100%;
+  min-height: 5.5rem;
+  padding: .5rem .7rem;
+  border-radius: 10px;
+  border: 1.5px solid var(--line);
+  background: var(--surface-2);
+  color: var(--fg);
+  font: .8rem/1.5 ui-monospace, "Consolas", monospace;
+  word-break: break-all;
+  resize: vertical;
+}
+.confirm { padding: .7rem .9rem; border-radius: var(--radius-s); background: var(--warn-tint); display: grid; gap: .5rem; }
+.confirm p { font-weight: 700; color: var(--warn-ink); }
+.msg-ok { color: var(--ok-ink); font-weight: 700; }
+.msg-bad { color: var(--bad-ink); font-weight: 700; }
+
+/* 出典 */
+.sources { padding: 1rem clamp(16px, 4.5vw, 32px) 1.4rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .85rem; line-height: 1.8; }
+.sources h2 { margin: 0 0 .2rem; font-size: .9rem; }
+.sources ul { margin: 0; padding-left: 1.1rem; }
+.sources a { color: var(--link); overflow-wrap: anywhere; }
+
+/* へや（シート） */
+.sheet {
+  width: min(640px, 100%);
+  max-width: 100%;
+  max-height: 90vh;
+  margin: auto auto 0;
+  padding: 0;
+  border: 0;
+  border-radius: 22px 22px 0 0;
+  background: var(--surface);
+  color: var(--fg);
+  box-shadow: var(--shadow);
+}
+.sheet::backdrop { background: var(--scrim); }
+@media (min-width: 700px) {
+  .sheet { margin: auto; border-radius: 22px; }
+}
+.sheet { overflow: hidden; }
+.sheet-in { max-height: 90vh; overflow-y: auto; padding: 0 clamp(16px, 4.5vw, 28px) calc(1.2rem + env(safe-area-inset-bottom, 0px)); }
+.sheet-top { position: sticky; top: 0; z-index: 1; display: flex; align-items: flex-start; justify-content: space-between; gap: .6rem; padding: 1rem 0 .4rem; background: var(--surface); }
+.sheet-eyebrow { margin: 0; color: var(--accent-ink); font-size: .85rem; font-weight: 700; letter-spacing: .04em; }
+.sheet-title { margin: .1rem 0 0; font-family: var(--font-display); font-weight: 800; font-size: 1.45rem; line-height: 1.6; }
+.close-btn { flex: none; width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; border: 1.5px solid var(--line); background: var(--surface-2); cursor: pointer; }
+.close-btn svg { width: 1.2rem; height: 1.2rem; }
+.read-btn {
+  min-height: 44px;
+  margin-top: .5rem;
+  padding: .2rem .95rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--line);
+  background: var(--surface-2);
+  font-size: .9rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  cursor: pointer;
+}
+.read-btn svg { width: 1.2rem; height: 1.2rem; }
+.read-btn[aria-pressed="true"] { border-color: var(--accent-fill); background: var(--accent-tint); color: var(--accent-ink); }
+.box { margin-top: .9rem; padding: .7rem 1rem; border-radius: var(--radius-s); }
+.box p { margin: .2rem 0 0; }
+.box-k { display: inline-block; padding: 0 .55rem; border-radius: 6px; font-size: .8rem; font-weight: 800; letter-spacing: .06em; line-height: 1.8; }
+.box-point { background: var(--lamp-tint); }
+.box-point .box-k { background: var(--lamp); color: var(--cave); }
+.box-point p { font-size: 1.12rem; font-weight: 800; }
+.box-why { padding-inline: 0; }
+.box-why .box-k { background: var(--surface-2); color: var(--muted); }
+.box-try { background: var(--accent-tint); }
+.box-try .box-k { background: var(--accent-fill); color: var(--on-accent); }
+.box-try p { font-weight: 700; }
+.box-src { margin: .5rem 0 0; color: var(--muted); font-size: .82rem; }
+.box-src a { color: var(--link); }
+.sheet-acts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; margin-top: 1.1rem; }
+.act-btn {
+  min-height: 60px;
+  padding: .3rem .8rem;
+  border-radius: 14px;
+  border: 2.5px solid var(--accent-fill);
+  background: var(--surface);
+  color: var(--accent-ink);
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 800;
+  line-height: 1.5;
+  cursor: pointer;
+}
+.act-btn small { display: block; font-family: var(--font-body); font-size: .78rem; font-weight: 700; }
+.act-btn.primary { background: var(--accent-fill); color: var(--on-accent); }
+.act-btn.wide { grid-column: 1 / -1; }
+.sheet-clear { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); align-items: center; gap: .4rem 1rem; margin-top: 1.1rem; padding: .8rem 1rem; border-radius: var(--radius); background: var(--ok-tint); }
+.sheet-clear .hanamaru { width: 5.5rem; height: 5.5rem; display: block; }
+.sheet-clear.pop .hanamaru { animation: pop .6s cubic-bezier(.2, 1.6, .4, 1); }
+.sheet-clear h3 { margin: 0; color: var(--ok-ink); font-family: var(--font-display); font-weight: 800; font-size: 1.3rem; }
+.sheet-clear p { margin: .1rem 0 0; font-size: .95rem; }
+.sheet-clear .act-btn { margin-top: .5rem; min-height: 48px; font-size: 1rem; }
+.hanamaru path { fill: none; stroke: var(--stamp); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ミニねね・ミニもね（一風デザインラボ） */
+.say { display: grid; grid-template-columns: 3.8rem minmax(0, 1fr); align-items: end; gap: .55rem; }
+.avatar {
+  width: 3.8rem;
+  height: 3.8rem;
+  border-radius: 50%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--line);
+  background: var(--surface-2);
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; display: block; }
+.avatar-ph { font-family: var(--font-display); font-weight: 800; font-size: 1.45rem; line-height: 1; }
+.avatar-nene { border-color: var(--accent); background: var(--accent-tint); color: var(--accent-ink); }
+.avatar-mone { border-color: var(--mone-pink); background: var(--lamp-tint); color: var(--lamp-ink); }
+.avatar-wrap { position: relative; display: inline-grid; }
+.sensor { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.sensor-rod { fill: none; stroke: var(--sensor-rod); stroke-width: 2.6; stroke-linecap: round; }
+.sensor-tip { fill: var(--sensor); stroke: var(--sensor-glow); stroke-width: 1.4; filter: drop-shadow(0 0 2.5px var(--sensor-glow)); transform-box: fill-box; transform-origin: center; animation: piko 1.6s ease-in-out infinite; }
+.sensor-tip.t2, .sensor-ring.r2 { animation-delay: .25s; }
+.sensor-ring { fill: none; stroke: var(--sensor-glow); stroke-width: 1.4; opacity: 0; transform-box: fill-box; transform-origin: center; animation: piko-ring 1.6s ease-out infinite; }
+.door-nene { position: absolute; right: -.8rem; bottom: -.55rem; }
+.door-nene .avatar { width: 2.6rem; height: 2.6rem; border-width: 1.5px; border-color: var(--lamp); }
+.toast .avatar-wrap .avatar { width: 2.6rem; height: 2.6rem; }
+@keyframes piko {
+  0%, 100% { opacity: .4; transform: scale(.75); }
+  10% { opacity: 1; transform: scale(1.35); }
+  20% { opacity: .5; transform: scale(.9); }
+  30% { opacity: 1; transform: scale(1.35); }
+  50% { opacity: .4; transform: scale(.75); }
+}
+@keyframes piko-ring {
+  0%, 8% { opacity: .9; transform: scale(.5); }
+  45%, 100% { opacity: 0; transform: scale(2.3); }
+}
+.hero-duo { display: flex; align-items: center; gap: .55rem; margin: .9rem 0 0; font-size: .9rem; font-weight: 700; }
+.hero-duo .avatar { width: 2.9rem; height: 2.9rem; border-color: var(--on-hero); }
+.hero-duo .avatar + .avatar { margin-left: -1.1rem; }
+.bubble {
+  min-width: 0;
+  padding: .45rem .95rem .6rem;
+  border-radius: 18px 18px 18px 4px;
+  background: var(--surface-2);
+  font-weight: 700;
+  line-height: 1.95;
+}
+.bubble-name { display: block; color: var(--muted); font-size: .78rem; line-height: 1.6; letter-spacing: .04em; }
+.say-mone .bubble { background: var(--lamp-tint); }
+.say-nene .bubble { background: var(--accent-tint); }
+.on-cave .bubble { background: var(--cave-2); color: var(--cave-fg); border: 1px solid var(--cave-line); }
+.on-cave .bubble-name { color: var(--cave-muted); }
+.on-cave .avatar { border-color: var(--lamp-line); }
+.mone-say { margin-top: .7rem; }
+.cave-say { margin-top: .7rem; font-size: .98rem; }
+.say-sub { display: block; margin-top: .15rem; }
+.say-small { grid-template-columns: 3rem minmax(0, 1fr); }
+.say-small .avatar { width: 3rem; height: 3rem; }
+.say-small .avatar-ph { font-size: 1.15rem; }
+.say-small .bubble { padding: .35rem .8rem .45rem; font-size: .95rem; }
+.say.just-said .bubble { animation: pop .35s cubic-bezier(.2, 1.4, .4, 1); transform-origin: 0 100%; }
+.clear-say { margin-top: .7rem; }
+.sources p { margin: 0 0 .6rem; }
+.toast-in { display: flex; align-items: center; gap: .6rem; }
+.toast .avatar { width: 2.6rem; height: 2.6rem; flex: none; }
+.toast .avatar-ph { font-size: 1rem; }
+
+/* ランタンの絵 */
+.lp-glow-a { stop-color: var(--lamp); stop-opacity: .75; }
+.lp-glow-b { stop-color: var(--lamp); stop-opacity: 0; }
+.lp-line { fill: none; stroke: var(--lamp-ink); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.lp-metal { fill: var(--muted); }
+.lp-body { fill: var(--lamp-body); stroke: var(--lamp-ink); stroke-width: 3; }
+.lp-glass { fill: var(--lamp-tint); stroke: var(--lamp-ink); stroke-width: 3; }
+.lp-rib { fill: none; stroke: var(--lamp-line); stroke-width: 2; }
+.lp-stripe { fill: var(--stamp); }
+.lp-beam { fill: var(--lamp); opacity: .28; }
+.lp-flame { fill: var(--lamp); }
+.lp-core { fill: var(--lamp-core); }
+.lp-wick { stroke: var(--muted); stroke-width: 3; stroke-linecap: round; }
+.lp-flicker { transform-box: fill-box; transform-origin: 50% 100%; animation: flicker 2.4s ease-in-out infinite; }
+
+/* お知らせ */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100% - 32px);
+  padding: .6rem 1.1rem;
+  border-radius: 14px;
+  background: var(--cave);
+  color: var(--cave-fg);
+  font-weight: 700;
+  box-shadow: var(--shadow);
+  z-index: 10;
+}
+.toast rt { color: var(--cave-muted); }
+
+@keyframes pop { 0% { transform: scale(.3); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+@keyframes flicker { 0%, 100% { transform: scaleY(1) scaleX(1); } 40% { transform: scaleY(1.07) scaleX(.96); } 70% { transform: scaleY(.96) scaleX(1.03); } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+@media (max-width: 380px) {
+  .lamp-row { grid-template-columns: 6rem minmax(0, 1fr); }
+  .door-name { font-size: .8rem; }
+}
+</style>
+</head>
+<body>
+<div class="page" lang="ja">
+  <main class="app">
+    <header class="hero">
+      <p class="hero-eyebrow">ふらり <ruby>個人版<rt>こじんばん</rt></ruby>（<ruby>試作<rt>しさく</rt></ruby>）</p>
+      <h1 class="hero-title">ふらりランタン</h1>
+      <p class="hero-lead yasashii">つかれて いる <ruby>日<rt>ひ</rt></ruby>も、<ruby>灯<rt>あか</rt></ruby>りを ひとつ ともせば じゅうぶん。</p>
+      <p class="hero-duo" id="hero-duo"></p>
+      <div class="hero-tools">
+        <div class="seg" role="group" aria-labelledby="lbl-ruby">
+          <span class="seg-label" id="lbl-ruby">ふりがな</span>
+          <button type="button" class="seg-btn" id="ruby-on" data-ruby="on" aria-pressed="true">あり</button>
+          <button type="button" class="seg-btn" id="ruby-off" data-ruby="off" aria-pressed="false">なし</button>
+        </div>
+        <div class="seg" role="group" aria-labelledby="lbl-size">
+          <span class="seg-label" id="lbl-size">もじの おおきさ</span>
+          <button type="button" class="seg-btn" id="size-m" data-size="m" aria-pressed="true">ふつう</button>
+          <button type="button" class="seg-btn" id="size-l" data-size="l" aria-pressed="false">おおきい</button>
+        </div>
+        <a class="hero-help" href="#tsurai">つらい ときは</a>
+      </div>
+    </header>
+
+    <section class="sec today" aria-labelledby="today-h">
+      <div class="today-head">
+        <h2 class="sec-h" id="today-h">きょうの <ruby>灯<rt>あか</rt></ruby>り</h2>
+        <p class="today-date" id="today-date"></p>
+      </div>
+      <div class="lamp-row">
+        <div class="lamp" id="lamp" aria-hidden="true"></div>
+        <div>
+          <p class="lamp-count"><strong id="lamp-num">0</strong>こ ともった</p>
+          <p class="lamp-rank" id="lamp-rank"></p>
+          <p class="lamp-next" id="lamp-next"></p>
+        </div>
+      </div>
+      <div class="mone-say yasashii" id="mone-say" aria-live="polite"></div>
+      <ul class="rhythm" id="rhythm"></ul>
+      <div class="next-room on-cave yasashii" id="next-room"></div>
+    </section>
+
+    <section class="sec cave" id="cave" aria-labelledby="cave-h">
+      <p class="cave-eyebrow">1へや 1ぷん</p>
+      <h2 class="sec-h" id="cave-h">ワンポイントレッスン ダンジョン</h2>
+      <div class="cave-say on-cave yasashii" id="nene-cave"></div>
+      <ol class="floors" id="floors"></ol>
+    </section>
+
+    <section class="sec week" aria-labelledby="week-h">
+      <h2 class="sec-h" id="week-h">ふりかえり</h2>
+      <p class="sec-note yasashii">さいごの 7<ruby>日<rt>にち</rt></ruby>。できなかった <ruby>日<rt>ひ</rt></ruby>が あっても だいじょうぶ。</p>
+      <div class="week-strip" id="week-strip"></div>
+      <p class="week-key"><span><i aria-hidden="true"></i>ともした あかり</span><span><i class="is-rest" aria-hidden="true"></i>やすんだ ひ</span></p>
+      <figure class="wake-fig" id="wake-fig"></figure>
+      <dl class="totals" id="totals"></dl>
+      <p class="titles-h">クラスの すすみ</p>
+      <ul class="class-prog" id="class-prog"></ul>
+      <p class="titles-h">しょうごう（<ruby>階<rt>かい</rt></ruby>を ぜんぶ クリアで もらえる）</p>
+      <ul class="titles" id="titles"></ul>
+    </section>
+
+    <section class="sec tsurai" id="tsurai" aria-labelledby="tsurai-h">
+      <h2 class="sec-h" id="tsurai-h">つらい ときは</h2>
+      <p class="sec-note yasashii">ひとりで かかえこまないで。<ruby>相談<rt>そうだん</rt></ruby>できる ところが あります。</p>
+      <ul class="help-list">
+        <li>
+          <p class="help-name">こころの <ruby>健康<rt>けんこう</rt></ruby> <ruby>相談<rt>そうだん</rt></ruby> <ruby>統一<rt>とういつ</rt></ruby>ダイヤル</p>
+          <div class="help-num"><strong id="dial-num">0570-064-556</strong><button type="button" class="copy-btn" id="copy-dial">ばんごうを コピー</button></div>
+          <p class="help-desc yasashii">かけた <ruby>地域<rt>ちいき</rt></ruby>の <ruby>公的<rt>こうてき</rt></ruby>な <ruby>相談<rt>そうだん</rt></ruby> <ruby>窓口<rt>まどぐち</rt></ruby>に つながります。うけつけ <ruby>時間<rt>じかん</rt></ruby>は <ruby>地域<rt>ちいき</rt></ruby>で ちがいます。</p>
+        </li>
+        <li>
+          <p class="help-name"><a href="https://www.mhlw.go.jp/mamorouyokokoro/" target="_blank" rel="noopener">まもろうよ こころ（<ruby>厚生労働省<rt>こうせいろうどうしょう</rt></ruby>）</a></p>
+          <p class="help-desc yasashii"><ruby>電話<rt>でんわ</rt></ruby>や SNS（チャット）で <ruby>相談<rt>そうだん</rt></ruby>できる ところの いちらん。</p>
+        </li>
+        <li>
+          <p class="help-name"><a href="https://kokoro.mhlw.go.jp/" target="_blank" rel="noopener">こころの<ruby>耳<rt>みみ</rt></ruby></a></p>
+          <p class="help-desc yasashii"><ruby>働<rt>はたら</rt></ruby>いて いる <ruby>人<rt>ひと</rt></ruby>の こころの <ruby>相談<rt>そうだん</rt></ruby>。</p>
+        </li>
+        <li>
+          <p class="help-name"><a href="https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/jinzaikaihatsu/saposute.html" target="_blank" rel="noopener"><ruby>地域<rt>ちいき</rt></ruby> <ruby>若者<rt>わかもの</rt></ruby> サポートステーション</a></p>
+          <p class="help-desc yasashii"><ruby>働<rt>はたら</rt></ruby>くことに なやむ 15〜49<ruby>歳<rt>さい</rt></ruby>の <ruby>相談<rt>そうだん</rt></ruby>。<ruby>全国<rt>ぜんこく</rt></ruby>に あります。</p>
+        </li>
+      </ul>
+      <p class="help-note yasashii">いのちの <ruby>危険<rt>きけん</rt></ruby>が ある ときや、<ruby>急<rt>きゅう</rt></ruby>な けが・<ruby>病気<rt>びょうき</rt></ruby>の ときは 119<ruby>番<rt>ばん</rt></ruby>。この アプリは <ruby>医療<rt>いりょう</rt></ruby>や <ruby>福祉<rt>ふくし</rt></ruby>の かわりでは ありません。ねむれない <ruby>日<rt>ひ</rt></ruby>や つらい <ruby>気持<rt>きも</rt></ruby>ちが つづく ときは、<ruby>医療<rt>いりょう</rt></ruby> <ruby>機関<rt>きかん</rt></ruby>や <ruby>相談<rt>そうだん</rt></ruby> <ruby>窓口<rt>まどぐち</rt></ruby>へ。</p>
+    </section>
+
+    <section class="sec store" aria-labelledby="store-h">
+      <h2 class="sec-h" id="store-h">きろくの ほぞん</h2>
+      <p class="store-where yasashii" id="store-where"></p>
+      <details class="backup" id="backup">
+        <summary>きろくの ひっこし・やりなおし</summary>
+        <div class="backup-body">
+          <p class="yasashii"><ruby>機種<rt>きしゅ</rt></ruby>を かえる ときは、きろくを もじに して うつせます。</p>
+          <div class="backup-row">
+            <button type="button" class="small-btn ghost" id="export-btn">きろくを もじに する</button>
+            <button type="button" class="small-btn ghost" id="copy-code" hidden>もじを コピー</button>
+          </div>
+          <textarea class="code-area" id="export-code" readonly hidden aria-label="きろくの もじ"></textarea>
+          <label class="yasashii" for="import-code">うつした もじを ここに はりつけ</label>
+          <textarea class="code-area" id="import-code" placeholder="FRL1: から はじまる もじ"></textarea>
+          <div class="backup-row">
+            <button type="button" class="small-btn" id="import-btn">よみこむ</button>
+            <button type="button" class="small-btn ghost" id="reset-btn">さいしょから やりなおす</button>
+          </div>
+          <div class="confirm" id="confirm" hidden>
+            <p class="yasashii" id="confirm-text"></p>
+            <div class="backup-row">
+              <button type="button" class="small-btn" id="confirm-yes">おきかえる</button>
+              <button type="button" class="small-btn ghost" id="confirm-no">やめる</button>
+            </div>
+          </div>
+          <p id="backup-msg" aria-live="polite"></p>
+        </div>
+      </details>
+    </section>
+
+    <footer class="sources">
+      <h2>キャラクター</h2>
+      <p><a href="https://ippuu-design-lab.com/members/member-mini-nene/" target="_blank" rel="noopener">ミニねね</a>・<a href="https://ippuu-design-lab.com/members/member-mini-mone/" target="_blank" rel="noopener">ミニもね</a>（一風デザインラボ）</p>
+      <h2>レッスンの でどころ</h2>
+      <ul>
+        <li><a href="https://www.mhlw.go.jp/content/001305530.pdf" target="_blank" rel="noopener">厚生労働省「健康づくりのための睡眠ガイド2023」</a></li>
+        <li><a href="https://kennet.mhlw.go.jp/tools/wp/wp-content/themes/targis_mhlw/pdf/leaf-sleep.pdf" target="_blank" rel="noopener">厚生労働省のリーフレット「良い目覚めは良い眠りから」</a></li>
+        <li><a href="https://www.mhlw.go.jp/content/001204942.pdf" target="_blank" rel="noopener">厚生労働省「健康づくりのための身体活動・運動ガイド2023」</a></li>
+        <li><a href="https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/jisatsu/kokoro_dial.html" target="_blank" rel="noopener">厚生労働省「こころの健康相談統一ダイヤル」</a></li>
+      </ul>
+    </footer>
+  </main>
+</div>
+
+<dialog class="sheet" id="sheet" aria-labelledby="sheet-title">
+  <div class="sheet-in">
+    <div class="sheet-top">
+      <div>
+        <p class="sheet-eyebrow" id="sheet-eyebrow"></p>
+        <h2 class="sheet-title" id="sheet-title"></h2>
+      </div>
+      <button type="button" class="close-btn" id="sheet-close" aria-label="とじる"></button>
+    </div>
+    <button type="button" class="read-btn" id="read-btn" aria-pressed="false"></button>
+    <div class="box box-point"><span class="box-k">ワンポイント</span><p class="yasashii" id="sheet-point"></p></div>
+    <div class="box box-why"><span class="box-k">どうして？</span><p class="yasashii" id="sheet-why"></p></div>
+    <div class="box box-try"><span class="box-k">やってみる</span><p class="yasashii" id="sheet-try"></p></div>
+    <p class="box-src" id="sheet-src"></p>
+    <div id="sheet-acts"></div>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ===== レッスンの中身（3クラス × 9レベル。1レベル＝1階＝3へや） =====
+  var SRC = {
+    sleep: { label: '厚生労働省「健康づくりのための睡眠ガイド2023」', url: 'https://www.mhlw.go.jp/content/001305530.pdf' },
+    leaf: { label: '厚生労働省のリーフレット「良い目覚めは良い眠りから」', url: 'https://kennet.mhlw.go.jp/tools/wp/wp-content/themes/targis_mhlw/pdf/leaf-sleep.pdf' },
+    move: { label: '厚生労働省「健康づくりのための身体活動・運動ガイド2023」', url: 'https://www.mhlw.go.jp/content/001204942.pdf' },
+    dial: { label: '厚生労働省「こころの健康相談統一ダイヤル」', url: 'https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/jisatsu/kokoro_dial.html' },
+    maff: { label: '農林水産省「生活リズムをととのえる」', url: 'https://www.maff.go.jp/j/syokuiku/minna_navi/topics/topics1_03.html' },
+    konkyu: { label: '厚生労働省「生活困窮者自立支援制度」', url: 'https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000059425.html' },
+    mone: { label: '一風デザインラボ「ミニもね」（6割でいい、それが最強なんだよ。）', url: 'https://ippuu-design-lab.com/members/member-mini-mone/' }
+  };
+
+  // クラス：初級＝なれる（習うより慣れろ）／中級＝ととのえる／上級＝くみたてて、つたえる
+  var CLASSES = [
+    { id: 'shokyu', name: '{初級|しょきゅう}クラス', range: 'レベル1〜3', theme: '{基本的|きほんてき}な くらし', goal: 'なれる（{習|なら}うより {慣|な}れろ）', clear: 'なれた！', from: 0, to: 2 },
+    { id: 'chukyu', name: '{中級|ちゅうきゅう}クラス', range: 'レベル4〜6', theme: '{応用|おうよう}の くらし', goal: 'ととのえる（くずれても もどせる）', clear: 'ととのえた！', from: 3, to: 5 },
+    { id: 'jokyu', name: '{上級|じょうきゅう}クラス', range: 'レベル7〜9', theme: 'くらしの プロ', goal: 'くみたてて、つたえる', clear: 'くらしの プロ！', from: 6, to: 8 }
+  ];
+
+  var FLOORS = [
+    // ----- 初級クラス：基本的な くらし -----
+    { id: 'b1', no: 'B1', name: 'ねむりの かい', sub: '{朝|あさ}と {夜|よる}の リズム', title: '{朝|あさ}の たびびと', rooms: [
+      { id: 'b1-1', short: '{起|お}きる {時間|じかん}', name: '{起|お}きる {時間|じかん}を そろえる',
+        point: 'ねる {時間|じかん}より、まず {起|お}きる {時間|じかん}を そろえよう。',
+        why: '{休|やす}みの {日|ひ}に おそくまで ねると、からだの {時計|とけい}が ずれて、{時差|じさ}ぼけの ような {状態|じょうたい}に なる。',
+        tryit: 'あしたの {起|お}きる {時間|じかん}を ひとつ {決|き}めて、アラームを セットする。',
+        src: 'sleep' },
+      { id: 'b1-2', short: '{朝|あさ}の {光|ひかり}', name: '{朝|あさ}の {光|ひかり}を あびる',
+        point: '{起|お}きたら カーテンを あけて、{朝|あさ}の {光|ひかり}を あびよう。',
+        why: '{朝|あさ}は {明|あか}るく、{夜|よる}は {暗|くら}く すると、からだの {時計|とけい}が ととのいやすい。',
+        tryit: '{窓|まど}の そばで 1{分|ぷん}、{外|そと}を ながめる。',
+        src: 'leaf' },
+      { id: 'b1-3', short: '{夜|よる}の {画面|がめん}', name: 'ねる {前|まえ}の {画面|がめん}を へらす',
+        point: 'ねる 1{時間|じかん} {前|まえ}から、スマホや パソコンを ひかえよう。',
+        why: '{夜|よる}は {暗|くら}い ほうが、からだが ねる じゅんびを しやすい。',
+        tryit: 'ねる {前|まえ}に スマホを おく {場所|ばしょ}を ひとつ {決|き}める。',
+        src: 'leaf' }
+    ] },
+    { id: 'b2', no: 'B2', name: 'からだの かい', sub: 'ごはん・{お風呂|おふろ}・{少|すこ}し {動|うご}く', title: 'げんきの たびびと', rooms: [
+      { id: 'b2-1', short: '{少|すこ}し {動|うご}く', name: '{少|すこ}しだけ {体|からだ}を {動|うご}かす',
+        point: '{今|いま}より {少|すこ}しでも {多|おお}く、{体|からだ}を {動|うご}かそう。1{分|ぷん}でも いい。',
+        why: '{国|くに}の ガイドも「{今|いま}より {少|すこ}しでも {多|おお}く」から すすめて いる。',
+        tryit: '{立|た}ちあがって、のびを 3{回|かい}。',
+        src: 'move' },
+      { id: 'l2-meal', short: '{朝|あさ}ごはん', name: '{朝|あさ}ごはんを ひとくち',
+        point: '{朝|あさ}ごはんは ひとくちでも いい。{食|た}べる {時間|じかん}も、だいたい そろえよう。',
+        why: '{朝|あさ}の {光|ひかり}を あびて {朝|あさ}ごはんを {食|た}べると、からだの {時計|とけい}が リセットされて、1{日|にち}の リズムが ととのう。',
+        tryit: 'あしたの {朝|あさ}、バナナや パンなど、{何|なに}か ひとくち {食|た}べる。',
+        src: 'maff' },
+      { id: 'l2-bath', short: '{お風呂|おふろ}', name: '{お風呂|おふろ}で 1{日|にち}を くぎる',
+        point: '{お風呂|おふろ}か シャワーで、1{日|にち}に くぎりを つけよう。シャワーだけの {日|ひ}も、それで いい。',
+        why: 'さっぱりすると、きもちが きりかわる。{入|はい}る {時間|じかん}が だいたい {決|き}まると、{夜|よる}の リズムも つくりやすい。',
+        tryit: 'きょう {入|はい}る {時間|じかん}を、なんとなく {決|き}めて おく。',
+        src: null }
+    ] },
+    { id: 'b3', no: 'B3', name: 'こころの かい', sub: 'つかれと つきあう', title: 'やすみ じょうず', rooms: [
+      { id: 'b3-1', short: 'できたこと', name: 'できたことを ひとつ {数|かぞ}える',
+        point: '1{日|にち}の おわりに、できたことを ひとつだけ {思|おも}いだそう。{小|ちい}さくて いい。',
+        why: 'できたことが {見|み}えると、じぶんの すすみが わかる。この アプリの {灯|あか}りも、その ひとつ。',
+        tryit: 'きょう できたことを ひとつ、{紙|かみ}や メモに {書|か}く。',
+        src: null },
+      { id: 'b3-2', short: '{休|やす}むも {予定|よてい}', name: '{休|やす}むも {予定|よてい}に {入|い}れる',
+        point: 'つかれた {日|ひ}は「{休|やす}む」を えらんで いい。{休|やす}むのも だいじな {行動|こうどう}。',
+        why: '{動|うご}く {時間|じかん}と {休|やす}む {時間|じかん}に メリハリが あると、リズムが ととのいやすい。',
+        tryit: 'この アプリの「きょうは {休|やす}む」を おして みる。それも {灯|あか}りに なる。',
+        src: 'leaf' },
+      { id: 'b3-3', short: '{相談先|そうだんさき}', name: 'つらい ときの {出口|でぐち}を {知|し}る',
+        point: 'つらい {気持|きも}ちが つづく ときは、ひとりで かかえこまない。',
+        why: '{全国|ぜんこく} {共通|きょうつう}の {番号|ばんごう}に かけると、かけた {地域|ちいき}の {公的|こうてき}な {相談|そうだん} {窓口|まどぐち}に つながる。',
+        tryit: 'この ページの「つらい ときは」を ひらいて、{相談先|そうだんさき}を ひとつ {見|み}て おく。',
+        src: 'dial', link: '#tsurai' }
+    ] },
+    // ----- 中級クラス：応用の くらし -----
+    { id: 'b4', no: 'B4', name: 'くらしの かい', sub: 'かたづけ・せんたく・ごみ', title: 'かたづけ じょうず', rooms: [
+      { id: 'l4-tidy', short: 'かたづけ', name: '5{分|ふん}だけ かたづける',
+        point: 'かたづけは 5{分|ふん}だけ。タイマーが {鳴|な}ったら やめて いい。',
+        why: 'おわりが {決|き}まって いると、はじめやすい。{全部|ぜんぶ} やらなくて いい。',
+        tryit: 'タイマーを 5{分|ふん}に して、{目|め}の {前|まえ}の 1か{所|しょ}だけ かたづける。',
+        src: null },
+      { id: 'l4-wash', short: 'せんたく', name: 'せんたくの ながれを {決|き}める',
+        point: 'あらう → ほす → しまう で 1セット。しまうまでで「できた」。',
+        why: 'しまう {場所|ばしょ}が {決|き}まって いると、つぎの せんたくが らくに なる。',
+        tryit: 'せんたく{物|もの}を しまう {場所|ばしょ}を 1つ {決|き}める。',
+        src: null },
+      { id: 'l4-trash', short: 'ごみの {日|ひ}', name: 'ごみの {日|ひ}を {見|み}える ところに',
+        point: 'ごみを {出|だ}す {日|ひ}を、{毎日|まいにち} {見|み}る ところに {書|か}いて おこう。',
+        why: 'おぼえて おかなくて いい しくみに すると、わすれても こまらない。',
+        tryit: 'スマホの カレンダーか、{冷蔵庫|れいぞうこ}に ごみの {日|ひ}を 1つ {書|か}く。',
+        src: null }
+    ] },
+    { id: 'b5', no: 'B5', name: '{お金|おかね}と {時間|じかん}の かい', sub: '6{割|わり}で {組|く}む', title: '6{割|わり}の まほうつかい', rooms: [
+      { id: 'l5-plan', short: '6{割|わり}の {予定|よてい}', name: '1{日|にち}の {予定|よてい}は 6{割|わり}で {組|く}む',
+        point: 'やりたい ことの 6{割|わり}だけ {予定|よてい}に {入|い}れよう。のこりは よびの {時間|じかん}。',
+        why: 'つめこむと、1つ くずれただけで {全部|ぜんぶ}が くずれる。よゆうが あると、もとに もどせる。',
+        tryit: 'あしたの {予定|よてい}を {書|か}きだして、1つ へらして みる。',
+        src: 'mone' },
+      { id: 'l5-fixed', short: '{出|で}ていく {お金|おかね}', name: '{毎月|まいつき} {出|で}ていく {お金|おかね}を {書|か}きだす',
+        point: '{家賃|やちん}や スマホ{代|だい}など、{毎月|まいつき} {決|き}まって {出|で}ていく {お金|おかね}を {書|か}きだそう。',
+        why: '{決|き}まって {出|で}ていく {お金|おかね}が わかると、のこりの {お金|おかね}で やりくりしやすい。',
+        tryit: '{思|おも}いつく ものを 3つだけ {書|か}く。{金額|きんがく}は だいたいで いい。',
+        src: null },
+      { id: 'l5-help', short: '{お金|おかね}の {相談|そうだん}', name: '{お金|おかね}に こまったときの {相談先|そうだんさき}',
+        point: '{お金|おかね}や くらしに こまったら、ひとりで かかえない。{相談|そうだん}できる {窓口|まどぐち}が ある。',
+        why: '{住|す}んで いる {地域|ちいき}の「{自立|じりつ}{相談|そうだん}{支援|しえん}{機関|きかん}」で、くらしの こまりごとを {相談|そうだん}できる。{家計|かけい}の {見|み}なおしも いっしょに {考|かんが}えて もらえる。',
+        tryit: 'じぶんの {住|す}んで いる {地域|ちいき}の {窓口|まどぐち}を、{名前|なまえ}だけ {調|しら}べて おく。',
+        src: 'konkyu' }
+    ] },
+    { id: 'b6', no: 'B6', name: 'つながりの かい', sub: 'あいさつ・{聞|き}きかえし・{外|そと}の {用事|ようじ}', title: 'つなぐ たびびと', rooms: [
+      { id: 'b4-1', short: 'あいさつ', name: 'あいさつを 1{回|かい}',
+        point: 'きょう だれかに、あいさつを 1{回|かい}。{声|こえ}でも チャットでも いい。',
+        why: '{日中|にっちゅう}は できるだけ {人|ひと}と ふれて、{活動的|かつどうてき}に すごすのが よいと されて いる。',
+        tryit: '{家族|かぞく}、{お店|おみせ}の {人|ひと}、チャットの なかまに「おはよう」「こんにちは」。',
+        src: 'leaf' },
+      { id: 'b4-2', short: 'くりかえす', name: '{聞|き}いた ことを ひとことで {返|かえ}す',
+        point: '{聞|き}いた ことを、ひとことで くりかえして {返|かえ}そう。「〜ですね」。',
+        why: '{相手|あいて}は「{伝|つた}わった」と {安心|あんしん}できる。{聞|き}きまちがいにも {早|はや}く {気|き}づける。',
+        tryit: 'きょう {聞|き}いた ことを ひとつ、「〜ですね」で {返|かえ}す。',
+        src: null },
+      { id: 'l6-out', short: '{外|そと}の {用事|ようじ}', name: '{外|そと}の {用事|ようじ}を 1つ すませる',
+        point: '{買|か}い{物|もの}や {手続|てつづ}きなど、{外|そと}の {用事|ようじ}を 1つだけ すませよう。',
+        why: '{日中|にっちゅう}は {明|あか}るい ところで {活動|かつどう}すると、からだの リズムが ととのいやすい。',
+        tryit: '{近|ちか}くの {お店|おみせ}で、1つだけ {買|か}い{物|もの}を する。{買|か}う ものは メモに {書|か}いて いく。',
+        src: 'leaf' }
+    ] },
+    // ----- 上級クラス：くらしの プロ -----
+    { id: 'b7', no: 'B7', name: 'じぶん{設計|せっけい}の かい', sub: '1{週間|しゅうかん}と、じぶんの とりせつ', title: 'じぶんの せっけいし', rooms: [
+      { id: 'l7-week', short: '1{週間|しゅうかん}', name: '1{週間|しゅうかん}の リズムを {決|き}める',
+        point: '1{週間|しゅうかん}の なかに、{動|うご}く {日|ひ}と {休|やす}む {日|ひ}を {先|さき}に {決|き}めよう。',
+        why: '{休|やす}む {日|ひ}が {決|き}まって いると、{動|うご}く {日|ひ}に むりを しなくて すむ。',
+        tryit: 'カレンダーに「{休|やす}む {日|ひ}」を 1{日|にち} {入|い}れる。',
+        src: null },
+      { id: 'l7-manual', short: 'とりせつ', name: 'じぶんの とりせつを つくる',
+        point: 'つかれて きた ときの サインと、{元気|げんき}に もどる {方法|ほうほう}を {書|か}いて おこう。',
+        why: 'サインに {早|はや}く {気|き}づけると、{大|おお}きく くずれる {前|まえ}に {休|やす}める。',
+        tryit: '「つかれの サイン」と「もどる {方法|ほうほう}」を 1つずつ {書|か}く。',
+        src: null },
+      { id: 'l7-min', short: 'さいていライン', name: 'しんどい {日|ひ}の さいていラインを {決|き}める',
+        point: 'しんどい {日|ひ}は、これだけ できれば いい、という 3つを {決|き}めて おこう。',
+        why: 'さいていラインが あると、できない {日|ひ}も「できた」で おわれる。',
+        tryit: 'たとえば「{起|お}きる・{水|みず}を {飲|の}む・ねる」のように、3つ {書|か}く。',
+        src: null }
+    ] },
+    { id: 'b8', no: 'B8', name: 'かいぜんの かい', sub: '{記録|きろく}を {見|み}て、1つずつ', title: 'かいぜん けんきゅういん', rooms: [
+      { id: 'l8-good', short: 'よかった {日|ひ}', name: '{記録|きろく}で よかった {日|ひ}を みつける',
+        point: 'ふりかえりの 7{日|にち}を {見|み}て、{調子|ちょうし}が よかった {日|ひ}を 1つ えらぼう。',
+        why: 'よかった {日|ひ}に していた ことが、じぶんに {合|あ}う やり{方|かた}の ヒントに なる。',
+        tryit: 'よかった {日|ひ}に したことを 1つ {書|か}きだす。',
+        src: null },
+      { id: 'l8-one', short: '1つずつ', name: '{変|か}えるのは 1つずつ',
+        point: 'くらしを {変|か}える ときは、1{回|かい}に 1つだけ。',
+        why: 'いっぺんに {変|か}えると、どれが よかったのか わからなく なる。',
+        tryit: 'つぎの 1{週間|しゅうかん}で {変|か}える ことを 1つだけ {決|き}める。',
+        src: null },
+      { id: 'l8-cue', short: 'きっかけ', name: 'いつもの ことに つなげる',
+        point: '{新|あたら}しい {習慣|しゅうかん}は、いつも して いる ことの すぐ あとに つなげよう。',
+        why: '「〇〇の あとに △△」と {決|き}めて おくと、{思|おも}いだしやすい。',
+        tryit: '「{歯|は}みがきの あとに、のびを する」のように、1つ {決|き}める。',
+        src: null }
+    ] },
+    { id: 'b9', no: 'B9', name: 'とうだいの かい', sub: 'じぶんの やり{方|かた}を つたえる', title: 'てらす とうだい', rooms: [
+      { id: 'l9-way', short: 'やり{方|かた}', name: 'じぶんの やり{方|かた}を 1つ {書|か}く',
+        point: 'うまく いった じぶんの やり{方|かた}を、ほかの {人|ひと}にも わかる ことばで 1つ {書|か}こう。',
+        why: '{書|か}くと、じぶんでも あらためて わかる。それが つぎの {人|ひと}の {灯|あか}りに なる。',
+        tryit: '「〇〇の ときは、△△すると いい」の {形|かたち}で 1つ {書|か}く。',
+        src: null },
+      { id: 'b4-3', short: 'ありがとう', name: 'ありがとうを {伝|つた}える',
+        point: 'してもらった ことに、ひとこと「ありがとう」。',
+        why: '{小|ちい}さな やりとりが、つぎの {会話|かいわ}の {入口|いりぐち}に なる。',
+        tryit: 'ありがとうを 1{回|かい} {伝|つた}える。メッセージでも いい。',
+        src: null },
+      { id: 'l9-cheer', short: 'おうえん', name: 'なかまを おうえんする',
+        point: 'がんばって いる {人|ひと}に、「いいね」を 1つ {伝|つた}えよう。',
+        why: 'おうえんされると、つぎの 1{歩|ぽ}が {出|で}やすく なる。こんどは あなたが、だれかを てらす {番|ばん}。',
+        tryit: 'なかまや {家族|かぞく}の がんばりに、ひとこと「いいね」を {送|おく}る。',
+        src: null }
+    ] }
+  ];
+  var SEALED = { no: 'つぎ', name: 'じぶんの {事業|じぎょう}の みち', sub: 'べつの みち（じゅんびちゅう）', note: '{原資|げんし}・{固定費|こていひ}PL・6{割|わり} {運転|うんてん}… じぶんの {数字|すうじ}で すすむ みち。' };
+
+  var RHYTHM = [
+    { id: 'wake', label: '{起|お}きた', icon: 'sun' },
+    { id: 'light', label: '{朝|あさ}の {光|ひかり}を あびた', icon: 'window' },
+    { id: 'meal', label: 'ごはんを {食|た}べた', icon: 'bowl' },
+    { id: 'move', label: '{少|すこ}し {体|からだ}を {動|うご}かした', icon: 'stretch' },
+    { id: 'bath', label: '{お風呂|おふろ}か シャワー', icon: 'shower' },
+    { id: 'night', label: 'ねる じゅんびを した', icon: 'moon' },
+    { id: 'rest', label: 'きょうは {休|やす}む', icon: 'tea', rest: true }
+  ];
+  var ITEM_IDS = RHYTHM.map(function (r) { return r.id; });
+
+  var RANKS = [
+    { min: 0, name: 'ろうそく' },
+    { min: 10, name: 'ちょうちん' },
+    { min: 30, name: 'ランタン' },
+    { min: 60, name: 'とうだい' }
+  ];
+  var WD = ['日', '月', '火', '水', '木', '金', '土'];
+  var DAY_START_HOUR = 4; // 夜ふかしの日も、朝4時までは前の日として数える
+
+  // ===== 絵 =====
+  function svg(inner) {
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + inner + '</svg>';
+  }
+  var ICON = {
+    sun: svg('<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/>'),
+    window: svg('<rect x="4" y="3.5" width="16" height="17" rx="1.5"/><path d="M12 3.5v17M4 12h16"/><circle cx="16" cy="8" r="1.6"/>'),
+    bowl: svg('<path d="M3.5 11.5h17a8.5 8.5 0 0 1-17 0z"/><path d="M8 20h8"/><path d="M9.5 3.5c-1 1.2 1 2 0 3.3M14.5 3.5c-1 1.2 1 2 0 3.3"/>'),
+    stretch: svg('<circle cx="12" cy="4.5" r="2"/><path d="M12 8v6.5M12 14.5l-3 6M12 14.5l3 6M5.5 4.5L12 9.5l6.5-5"/>'),
+    moon: svg('<path d="M19.5 14.5A8 8 0 0 1 9.5 4.5a8 8 0 1 0 10 10z"/>'),
+    shower: svg('<path d="M5 21V8a4 4 0 0 1 4-4h1a4 4 0 0 1 4 4"/><path d="M10 8h8"/><path d="M12 11.5v1.2M15 11.5v1.2M18 11.5v1.2M13.5 15v1.2M16.5 15v1.2M15 18.5v1.2"/>'),
+    tea: svg('<path d="M4 9.5h12v4.5a6 6 0 0 1-12 0z"/><path d="M16 11h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 3.5c-.8 1 .8 1.7 0 2.8M12 3.5c-.8 1 .8 1.7 0 2.8"/>'),
+    keyhole: svg('<circle cx="12" cy="9" r="3.2"/><path d="M10.6 11.6L9.5 19h5l-1.1-7.4"/>'),
+    lock: svg('<rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/>'),
+    close: svg('<path d="M6 6l12 12M18 6L6 18"/>'),
+    speaker: svg('<path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/>'),
+    stop: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1.5"/></svg>'
+  };
+
+  var HANAMARU = (function () {
+    var c = 50, R = 36, n = 9, i, d = '', s = '';
+    var pr = (R * Math.sin(Math.PI / n) * 1.3).toFixed(2);
+    for (i = 0; i <= n; i++) {
+      var a = -Math.PI / 2 + i * 2 * Math.PI / n;
+      var x = (c + R * Math.cos(a)).toFixed(2), y = (c + R * Math.sin(a)).toFixed(2);
+      d += i === 0 ? 'M' + x + ' ' + y : ' A' + pr + ' ' + pr + ' 0 0 1 ' + x + ' ' + y;
+    }
+    var steps = 64, turns = 2.1;
+    for (i = 0; i <= steps; i++) {
+      var t = i / steps, ang = -Math.PI / 2 + t * turns * 2 * Math.PI, r = 3 + t * 21;
+      s += (i ? ' L' : 'M') + (c + r * Math.cos(ang)).toFixed(2) + ' ' + (c + r * Math.sin(ang)).toFixed(2);
+    }
+    return '<svg class="hanamaru" viewBox="0 0 100 100" aria-hidden="true"><path d="' + d + '"/><path d="' + s + '"/></svg>';
+  })();
+
+  // ランタン：かたちは「ぜんぶの灯り」で育ち、明るさは「きょうの灯り」で決まる
+  function lanternSVG(rank, today) {
+    var lit = Math.min(today, 4) / 4;
+    var glowOp = today > 0 ? (0.25 + 0.75 * lit).toFixed(2) : '0.06';
+    var fs = (0.75 + 0.35 * lit).toFixed(2);
+    function flame(cx, base) {
+      if (today <= 0) {
+        return '<line class="lp-wick" x1="' + cx + '" y1="' + base + '" x2="' + cx + '" y2="' + (base - 7) + '"/>';
+      }
+      return '<g transform="translate(' + cx + ' ' + base + ') scale(' + fs + ')"><g class="lp-flicker">' +
+        '<path class="lp-flame" d="M0 0C-9 0-11-9-6-17C-3-22-1-26 0-32C2-25 5-21 7-16C11-8 8 0 0 0Z"/>' +
+        '<path class="lp-core" d="M0-2C-4-2-5-7-2-11C-1-13 0-16 0-18C1-15 3-12 4-10C5-6 3-2 0-2Z"/></g></g>';
+    }
+    var glow = '<defs><radialGradient id="lp-g"><stop offset="0" class="lp-glow-a"/><stop offset="1" class="lp-glow-b"/></radialGradient></defs>';
+    var body = '';
+    if (rank === 0) {
+      body = '<circle cx="60" cy="62" r="54" fill="url(#lp-g)" opacity="' + glowOp + '"/>' +
+        '<rect class="lp-body" x="49" y="66" width="22" height="50" rx="4"/>' +
+        '<ellipse class="lp-body" cx="60" cy="122" rx="30" ry="7"/>' + flame(60, 66);
+    } else if (rank === 1) {
+      body = '<circle cx="60" cy="74" r="58" fill="url(#lp-g)" opacity="' + glowOp + '"/>' +
+        '<path class="lp-line" d="M60 8v16"/>' +
+        '<rect class="lp-body" x="44" y="22" width="32" height="10" rx="3"/>' +
+        '<ellipse class="lp-glass" cx="60" cy="74" rx="34" ry="42"/>' +
+        '<path class="lp-rib" d="M30 54q30 9 60 0M27 74q33 9 66 0M30 94q30 9 60 0"/>' +
+        '<rect class="lp-body" x="44" y="114" width="32" height="10" rx="3"/>' + flame(60, 86);
+    } else if (rank === 2) {
+      body = '<circle cx="60" cy="76" r="58" fill="url(#lp-g)" opacity="' + glowOp + '"/>' +
+        '<path class="lp-line" d="M44 26a16 16 0 0 1 32 0"/>' +
+        '<path class="lp-body" d="M40 40h40l-6-12H46z"/>' +
+        '<rect class="lp-glass" x="40" y="40" width="40" height="58" rx="3"/>' +
+        '<path class="lp-line" d="M53.3 40v58M66.7 40v58"/>' +
+        '<rect class="lp-body" x="35" y="98" width="50" height="12" rx="3"/>' + flame(60, 90);
+    } else {
+      body = '<circle cx="60" cy="40" r="58" fill="url(#lp-g)" opacity="' + glowOp + '"/>' +
+        (today > 0 ? '<path class="lp-beam" d="M44 36L2 22v30zM76 36l42-14v30z"/>' : '') +
+        '<path class="lp-body" d="M47 22l13-12 13 12z"/>' +
+        '<rect class="lp-glass" x="45" y="22" width="30" height="24" rx="2"/>' +
+        '<path class="lp-body" d="M43 46h34l7 72H36z"/>' +
+        '<path class="lp-stripe" d="M41.2 64h37.6l1.2 12H40zM39.4 88h41.2l1.2 12H38.2z"/>' +
+        '<path class="lp-body" d="M30 118h60v6H30z"/>' + flame(60, 42);
+    }
+    return '<svg viewBox="0 0 120 130">' + glow + body + '</svg>';
+  }
+
+  // ===== ことばの変換（ふらりと同じ書き方：{漢字|よみ}） =====
+  var RUBY_RE = /\{([^|{}]+)\|([^{}]+)\}/g;
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (ch) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]; });
+  }
+  function rb(s) { return esc(s).replace(RUBY_RE, '<ruby>$1<rt>$2</rt></ruby>'); }
+  function readText(s) { return String(s).replace(RUBY_RE, '$2'); }
+  function baseText(s) { return String(s).replace(RUBY_RE, '$1').replace(/\s+/g, ''); }
+  function $(sel) { return document.querySelector(sel); }
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+  // ===== ミニねね・ミニもね（一風デザインラボのメンバー） =====
+  // img に画像（data: URL）を入れると、丸い顔アイコンが絵に変わる
+  var CHARA = {
+    nene: { name: 'ミニねね', initial: 'ね', img: 'data:image/webp;base64,UklGRuoaAABXRUJQVlA4IN4aAABQaACdASrAAMAAPmEqkUakIiGhKHItWIAMCWUAyBgrUh/mefpfW/u2Z5/D3n/I9e+398z3m6enjeqfQl6a3Ge5UfNP9P4e/kP2X+p/NP+88+Hrf/uehv8v/Gn8D/B8dPzW1Dva3+u4DkA/19/1fiQ6vvuv+f9gP9Uv9jyxXrHsG/zH+7ftL7J31R6YP0b/Rewr/M/7l+vhrt7Pt9RvuDP/EMPKQ0P4QJGPBEvPwq/deGVQzZY4MJ8Pa0RrRDOEjuFAp/8x7ZFjccEmmhRNV9VFkyT3nZTEamYGe9AVEFwGo9Jelta2Bh2+kcjp//8zzXus67NpbWMFt/+J3glJnDM1tOdc1BlUa9NmLx0Tv4301ekv5MGdFL9pWzMSxva+uJNZIS2nd9zdjVJHRopejOXrphx/HitnqNdNRHhSD8M1CGp6Ia9AMPRT8twsNNTMotzczcmzua+eItu1vC/1FIO/Hzjix/u14XjUR8yg6BdfUTpH0BjbPmhiacQwA2jhU0Mx0WkU7mrjisP1i1kMoQHPSPJwtUgYZx+elaKJFRY+KIg0GaacvLgO55JNQTl8a66hcSK4s6p3eWXcxLnxdZ62OyNcDx4KYPwSatR9JNb+yJ9/op9k7QCTJPlHUDc6849l2tUg0v9nge8R3HG6GxiLBeQIMJDtaghf4yQ7v8azTaMVASqzm6+TWygRAsH1Z5FakYytHsS0vZ2t7oxW8B4+FYafnV2Vmcgej8VbDJVgvO+JX/BzfEME3KZgLAhZJ5F/LkSuF9ps65WyXAnFnPl4lScoV4fXuJKRsS61fLyBon6eLJ1wU21qCbVZr+shhE1aE2zXidiSSG679mO6KaDs9mn4iGXfme5Gcvpq+cEngDF/wmNFo/1+YoE+G56BhoJJ4GRmfejZX6nSzpGUlRaD1ir8JPCL9ubx5huhcrfZG4Jh+3xOYrp35FomCHSxCm+pi06UB4eqrakL01pcylsTHcdEaDp6a/9dkIzV5RE5epiU4v3ASQUp1qQecCzRqPg47uCu0kOCc0n6cH7+0K3Y4eRi9kaPAUJfBie/AfaWLqfX/pfA7s5fcBCTV8RCOwljzxJzGDuB+sBTrmFlBpTxpd4G2GxocCr1mwAA+9nHBi3MnalhhXi1oDR0M58GXv/PoD1NIAIT/wUZLq0DTaPBRhQGL2RtNhgwrMnykzi5yBqNHKvdhMG7Ey3XkKB7JQhTVRyuekXTqKn5Ih1PjU0y4kv5QXOmigWTY70HO9C0dM2DzC6ca+4SUCqk0GzUf4sNGF9OB7+0FT6ifRVgOflw6DeKphKaAi5R/uEQhKNbGdlBVVBmmtMekhO+quzneLcE0UeiKcBFFC5oRlhtPYKKx1ZykWfhWXLdcHaGbQ1qlyr7chI9TeuL10JD6tubtc5/wTOMSzMMwMtaQC1jlud+kOSyC6SAQC3eHar4eS+np4M86SR70BPcgagGjMyyqPN2q9nelN54XLxXcH6DbGDrY69NKQ9UoD+QD4Esi+EnmvXiMD+gsDBNqkzKqOKmdpPo2Yo0MU9UKcC6BHBaupbZbZGHJ3VBBS4kQjzUSCMBiz0lfwsgIdlI3aBTSvK6o1ufchFHGqAjM4Eqshe4Hmu9Ihb/NYAdk6h4zq6Z9O5QjHL4i1n2MSHATsC9KFhAkfzvOgJ/f3DXLJ3Zr/SUyoMnVsaQxGQJT6IVT9qlTjpDoDeH14V5Wzd9nr+0/49JG9kI9RVbpniTHQXzIcvOMvnSY/MNsq1u98Wjl9qELf6cy5DU6FHwUAiWu0K7CJc1QS8xeKPnt7VjygKFKebAo/3nxVEy0ADIEGQ/GBXmMPD0R/NJYAKCA6rtm3xKTb5TTkqsG5uryC0wFUqsdMQ4HYK+YwHEWrdgF7AKYnLyMl/5AyianWHN/ErUOskJ1MhNXtTcHPNjZ1CXnzgroXLcBtC/h7anANtobWSsYqf7farAhq8Mmq2tc/gDPYXzBaSdPbnFQgYAijuwf0ZmKKmMpP6Q5XGNlrGVX9NIhe3MlvWE18yn/fzshT66UGyhT9eUdLLfHbjd8Zmsh14dfA3nb3uuJN/Q23JXqtF+vXxqvkdGntWqiA+wPIL9vzGgXmL8vgig1muGCONHIFDfM71NOXS6DeOA+21R4EZBkQB2uOCE6DL+nJ0bqILXPu5vXPdrWq70TR/G/W06453vKSJs8jiMC8PCoqjZc6Q+w1CzvhqLmcxK2qzmOYevjdRaTLKUBh1c4xK/IC/+YCfEDhE8FxQpCP3OEH1sIR+oFBEImv/lRuHsW4lehGiSfOxvNMmBwk5zme1iGfFjWsi/47pkXGZGSQEaDC0x0GqTcR/y7xr7+sUyX9G/fAwvz7A38cUOVuU8kRWeayNMusK706Lo8linPi6HJ1EQzvTMQA9GD1KkL6t7C/92cIE8L4/f9jFobTFZiVSAiBG6ecCP1hGMGpKUX+1NaiHvVdoHipqkgZlI5KkriMLusk8G8koXp8Um21HKPWvGj7zqN7trYkHP6sqH3AE90l8CpNiQpd5Ap2YArosXTl7gL7xLQgbmMLDGvaVWYBE8DJoqt3QpLPLhxgvuwwHpFwwb71v+QVKqKDbej2n80iha2JjvAXS8V1EFivRrG52NKC/GwjyvEX70znzzlEkd9q+ps1VEDH9E6Yildmkt+etwXeOpcoOKH02Putlu2VFMMivYlnDKEjTZUcvrNmv16qMI6yU9PLzCZtBj7AX2JxBU2pgzFXyGwqY8q7OBDuk5m90Uzouk21FotCD/N6lg5X6oGqRXF9q+tgHU4V1gxPwALNKmfiMtkhromh4DCFMt5im0G1wRQUkhaR/j1twQOQqVY15Ub8Y5T2dTIqmnwXprUzh8YqGiQVsxT/Da0o3jAVuI0kXtBNcpp66Ht88XtYOXce2zJ1rICK6Ps24kFVpqQTiF71r2pP/DKPV/g9Aa2R8oZKpJzgVl6IVpCEpKEZf1fT/AisR9UKN5Ac+mH1KDhRDcxIeFX+pUIZZrejKyjkacmenuaeyCFMH+Jg5qCcjO7d5w/Ch9483+BMZ4TP4VNX4o15bLyt9AlTH3CGCk1oFgv0mLFp8jLPb3HqE4HXJ7+prXAW0z1FulkAyJOf528w9ZhBFzxrVx8rDiL5EsBioH1bfhWYgMUrmopUdxOkdYUwevj7znbBkYdY/qLY9yusq3CIjjy3y5vpwu7TVOP/BLCgrPTpxmlws7aJcP/usxHDahp5kDp5TsNS/ZcTgv0cQ/OYoUV3W4F9kdvA2TNbbiCjJV7UzaXuXbHsbFBG5hfAkgNhHJWxxoBueNbf+5S1Zf17km2KxkF0qbbC7S0OzAcKN74M+crCGHZyrVPYzzygGL0vQ5vH93tISvzG16BQTR7O95Lgi5pdL01jwgQlfVm5H6QUo2HzsXi05dmZn3vexb0EjyCctZH0eC/pHvjc+EDuwsz21BV3nthBbF75uKSXj4gDaHwfBQIK4AgARKyOzJxZOtVFL8vjXrWGXSyLYpGlozPQK8qWCh4bb3cCEqgXhwITQmJ0pyJCQgzwKKG6RHYvAaQi1U6rxF2gbQ27XCas11bSlv0rJFhRfbdlkLUFQwyQDLNiZZtPq4uN+B404s7dGtjY3SNHgATQzWxagCSQkF0XthzunQyk9gJuac9B3g+2KjCide95ixHo+EZfJm5fqKefIWb8iJLv1KBWx5Kc7TueZljQTS04G46fy7qNrH46z/hGJp/dYexIbcwQ954LyfKdVVw/ZTi0oK3VqgBkqsgtOFbU+UoKK0XISKg6OopmNCND3POVIx+AFgX6Ns9L4ng9eYBZvXytmgjpo+D8stNOrNLH6vRdimUySFQGFpFNKBhJi6Qx2M/yxsvbgV4V5I+iusZJtIDfrBpjJrkk3BCuGBV1AKm3Lnayq+XRLsq9r2CYycOPOBOIwdIi+YbxIwkYKVBBL1/8djj3aKgz/BcBEUxV3yGZDVz+ILhyG1zNy+Hwkg5ii4zPp/nHqfYy1xfQq8CfIxKLQhm59/BcZqFSaDtkHm/GBcTYijETRyF/3y9GpOpmSWl2P1JaB+Lnh6y+ZeDStbzJYbkRdNajuacRcYzDEqN9dz+6RVGdJn9dLmYsEUJLxVu3Nkogid2G8X0PsjO3iZ4YLSv3N9NKyh4jqAcjeLuGWRBD7AtEprJC49Ro8HbGeBtIYmcsRJbjxyX/Ww2Bu9eU1K3Gq+d3NSco+npdXseZZfm7A/+Eo4pmkd/C+e88799BQeaOMxUMFHojbmHqVX9FvD85se1jQI+AQWC9TBm4JXQpR9hZU38fTzP/LGKGsKXEdQBv1cP+fsn5WhbD1qmq5Ft+1/41cHc14SpIlqg2qNpRDjqVNw8N0xuJpdscc9T+GP05t2Rb7C2QwLp3vS8kkuMn+8xakHG9TGQK0afsOqt/yAOVJjq17Nr3trSvppR58f4Sq1u0h+dZnWHEVSIcTLvs+fSaqwcehbH+8Za/GsFT+schBsu6mcKWFyE4Jh3Afj7IW0UQRlEk44mzZf0XK54OJaMJmmgyAxAdSB/+Mi0x7fYBZc7t694RRpCL4YGBwMXtneB8PVyeV4BaGAL82F2rNgmKhR+A1zdp3Yw5HHAiPfeSoAAD/a2z4u+lSYJcGB/XIFuX1Cmd5Tpnm9UfmpO0VJLALHHTLYetguN2BlwSSNFP1YAeFMuoR00sNgrVmQJjp9UERpnH0n9L7xxTNSvjhJbKN8kmPFRdcbDTW9alGJFMF7h8/y7qcGw/QG1vNUUG/c+70n6orolEUffotLZGN6iFVnBFSDZEN+I/n0Y+Vyb8beBy1IEuNrI0v4n2htZpINOcLXaT8L4JMdocmpDyW9Ih4U7gG5bBB2QYDkNz3VOdx15TcR4N3adMgYznp29SwDDORIj9h0uBM9kIUe1KDCRzbeo9ihgz+hTOr+9r0u0ZJ0AHVxpy0MvCy6MIry4WenwP7qzBjnpoN/R2SoFl3t0VQKGeJp4/DsA5tH6g328HputgLn9rnpuiOvpLVK/3K8/pGaiqk1jglZSvpfDIZgzo5/GTNFmdGgZxZ3R+Jrc3w4V62f3NJDHQgQiesgumEa+vuY+nwB7TKNDtGH/t7bb9kwbSRup5x1mVdtSmADlwZvuDk68OVF1qmmk3m7/ZqiK/MTjRwKE8dOJMZ2HTGkSuH+k+PmvnLGxn1c2KUrZNdJW3ReiSPr3cB+QWJCeeQnNEfGEoKqXZF7vynquJMGxUs91wWmEcK6PwJ1drv/69sVi/61Doxnj8FOG1BYcCidLu7uxpWD35RHDshr5yfV09Pc+izhby3v1pm0sKvusYsKDgwK8MYxuZycSgTUJ8aj5n4ZavlcoUjX10EftawOCzGgD7QSFQdsKZU3KO6RO2FUd6l9omD90y/C3f5ceOc1+RL1Yjkt78qMXmViuisrXD54dAF8K0mrSL6FAU2nZCV9PZw/NBzALuVHhxIYJtHx5IYbFAThfiTZUcP9R6qZSxl0LC2zKTsrOvdeg/8Tx8wxB/48f+Q6VPRNmXEaHk/OVZqnuEs88BybEyRCxT2O66ibsEMuRCG3ifJNPcLc7rKvqUYHAF6Zv0SN19w2p7senA3PklOh9zfqxvuL6SkSJxbq0OKb94wBJaN61HZ35v85KEAXWmhOTvH2mYrjFUGQQRA3T6XfcFWPqQdg2y2AUKXPqqX2TA/hXtBUZmikMwmpX2xPPpedP5FX3Yw6B2oseScqA0qDZ1W3KgHn625IL4kWkH3ufWdqmg2mLs5C59HsktvnVhcWlT9SBO7PkiNM4WyM6bUw16GDiXSj4Nw6344CzYZBe3j00gllYDMNxDXbwylkBd8XWvHQt7iIix2lXrt/jxO7Q0VonsHr9iwZVUeNJA1leuBZ+0JfR96RVb4/RAQ7xqyNErTEXl5dZCHXI/1diruol7REKolPF+0Ft4bKMUDhvqlfSXYeJK2TJ31YCBABJjnuOlrz9ihSrC3iWI3dz9QAPL5g9qhTEJ7bQR5fcHWfhhX8KWftkbNownOsGlcfpOBUtP+7GL929SBJsaxpmJ+b886EgOnhKyVyO7PgN0wftepvDrPvS4YG4ukGDTeT3ndCMMHW50nszkRt3QUJavBXYi6G6UsUNTP1g6KGdjvk6AH14a0TFkPIKcanY0JGLbk6eZq7s4N4wPFZPQ1/PBUQwLThpks/Jv1LmBnDHfEZSkQSB5wDZjMgrTgxyKbJvN3CeRg789yiWQPoDtay8BzHJ666Dd+2Eq//eEgz/B3FUVUOmcQ/bFV9w2z2Vniv/Vbphb+uxf70j7ANZyt6eTLVdTbRLjC7iUSdeyjffULwrbHze1iQQuqVMsBOKZMTeCc3ioVSl5Fc+JwzQZZRqM67S9XPP+8y3wdOBh50UCR3rV/1pzrJXd0GjfPN7k5GHulRjARYkBGnx3UnH4vd1Erl+3ZNpWA680LPx+dWzn8PgjzcxfpasXBUo+xcqv1vCHlRZfpmGGlVBPDYz5SdIoXWFg5J4UyDulot78/M+mxKbC8kkdgTbTvDZ7dCqj4S2ZGpj/0KGOdFtP+RjukJRNbChdMIEi+YAliSM9m8UtYqlDFDxXI+OVB37NMH9U1NVMTisPmqs/IaeKeGyIE6hMl2y+aLYBABd4ocoF8OWw8r8uFNjUuH1rCsK+y7QPLqUjWkgsZxGAx9qPjW3pizSMzfGGeILRoU8FVeis5bperMC6gbfkSMIYvu46r3KeX+VZoWF1TFn0z/gCtCnGWpdtiIlofv1si0sjrWBmBcxzDcVmrPYiTqtREbz+zW6bBPeR5GiHGUTiLEp2xjrlt7/7cWP+eY1fVkebo2xWVA6KUzM1lX841sL44hrJ9kEE5g6XiT/C5VkAJq6AQ4mQ9DLHoiCN9hSqVt0S4T6t8Eo9Uf/zmUXJ6KUgNEFimZWluK9C/38Zap4gM4ooaai0GpkzdeI6OvCUY0L2iQTo28PKYLG1s7qkRKtcNM5uix8nNwmDsOS6VSpM1RGvsEANlVUWqyXk2BlfjcTWbD8MiFWioO2r0Y1gaBPevPdVtmMR7gNwf+9C0rlZMSYNnBdOvbiULxHChJ1l4dAYJpvybvPAK6cTTxbhj0R1gTJuCyrYgx2PQuR6xX8litQFjcpgaoOgjQ78xyxM7deyzRswG3fNa5KAAi6vUdrI/FSwo3JYwg3AAYcrrKrhFLF4LA37GRVgybwNjUzTcbqQL6I/Y2QhPgChzOPHq4bcHWBI/jJCGVVRCCZT+9oVAhPjQ0EEaBBA969Tm7aSkozDGew7HYYX15CFy29ssa5rl2jtoaLPuPAjUaT4uhIcwk7aG5aWa/+F9DCVLje6KzMPfs4zZ86QYAXObdohAxBxoZnP877pPdSClwYE17EJNCoCy0KBxfgolIpPZKMGKzHPt2mZy24N9tPnbuuLKZo2YlL1y0xWQRanpr3yXC1Omowhv2YCGq1uybaPc2k/1sc5Yjps098/XRWvQ5O5RA23+WonfdvX1yU9AKVLcw1jdne50vuhV1eSgm0GM3k5dv1XSMnbgWzGlTQUIfK/xMoPF4nqNG7d6K2WB5Dr55mxjr5pEXfhOSwADAu1VzjSWvYSRRkDGFtMw7/RmesgNfANrZVoJoTzpa+mW6KNbyP1YgWXh083LJAqySAZOreNzJyYt3+7Z4XWvTxMMiDTR/CABvE5nih55yWvjEiYm1zE77syGdHCFZG6iYeTmDJKQFYf3pdcGRtz4vcvdBLhz3atRccl7V2Peqhcp7Ljr1DqEcry3NvETDPCVu1tioG930Ja3/ms6kjoYy6Sn6Cc5gOudLqsnCzIKm2Op6zpX2bADYBgStsM5FvJN9hD7w9kGR2renT/fogL/MylUcxl6sM473eMlxPkhao/wcqjhqXKp3A2mju5QzndFVBI3pTjlX69/6oHhIrXSs+h/X6XEU2M22G7iTHfmfRNoapS+jqk9buW4T3AmeuiEwgJ1N5kq/NbVF/2FbcbFSaKCwF06S2HNzkIWV7WBH5uJl7+VIVLELFb2DNQGIJ67sxUTNuSDx7dwYmgmPPeUg0h3RgoOEl4IOcrM+j632TUQiTi4ARux8g7FuP5RIkTC1BHbTOyoV7ez1hhLHV0/rxeio+x2iz3qFQIY180xx+Gd4ODXa/3/NAmspFGe9S2LVcNGNHfL+sRFcsjWAMlIu2tKxsOgt6OURwyJCGrtxWMe4e6jO8zl7pqkweK/ZX/LihNx1DvZyVOq1S3U4BFQBlLzumw1t4Avt0Fcr6zMhmw9yl9jpUZE6aAPPcI5xP8wSoQ13HSYTxFJv3gWtgL0OkKp4NwCWNodYqpf9Yxxh8Y41zAp8Ep66XLbqI0Xs7vxk306RgOWf2vz1yiI4oYD15gsUyVs3L6XYvu9ZDmL5vorxbbEmBc5z/C3WlqQZcLhHqFf/6qQnkAb39hiSYHlHly25KhchIashWvabGIKolO0irHj9H94GKAIgG/UDLX93FBdp9uSJII1SSOhJbrIQPrUQPCaxNQl6Wh2tXBr45WjrlKthwJMYASfM9dL0N4VBiJ4VovyUBj8IJATGUdu51ttaHHX+/Ze7lzGdQUiXcnGSyzn1O+0KWatP41BNKPLS4rFtD91UbCijHOAVbEmPknJ//iALAZYLHtKTXxoOpPkaWUlczYXXN2sW8drF5/blHv40rhUmzHM+6kwckYlu2YGbOwI/yrV9aFXIDSsHXfKKKwgkXo2uETYX84tZsjD3EIxqlysC7AzFDv70NH4YAOvKlmG06CYtlf6X1WNM2yhaV376b9xENeUEfrZWUNb503Zx5eeBSeZyrjwmkp4IWBR+UmG8YBU6Eh+Jo+Z/w9NLhP/BPFK3/B7FFK1QoZRcP2Oo6Y9Dtfp23JHHpZ1pQlwlzA1vdN8qt2Ory2Zu2/2NGShnBj/10QmBoaVa0FytK3yErcZie5f4ou/PgeRtzAa0Ar2u5k9tOFtWDrlYoVEN+UNW/kBd2YmUk4CN+Wpa+70kQ3Xvg3N65v7AY+f04KKWitSXW2v+o1bwxpTDD2ROfUB9YX6sQZUaStgcSPR73PtwunEksaiZvSmTwDxIj2yihdgYqmpF5N2Hd1SYSaeqbIGe3U5VNaOVRDZj195zovbIcBhgi9EKvrhf+MrBsqE+zzlypb8rwHrdlLgAAA==' },
+    mone: { name: 'ミニもね', initial: 'も', img: 'data:image/webp;base64,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' }
+  };
+  // ミニねねのピコピコセンサー：おすすめの部屋を見つけたときに、頭のアンテナが光る
+  var SENSOR_SVG = '<svg class="sensor" viewBox="0 0 100 100" aria-hidden="true">' +
+    '<path class="sensor-rod" d="M31 16L24.5 1.5M69 15L77 0"/>' +
+    '<circle class="sensor-ring r1" cx="24.5" cy="1.5" r="7"/><circle class="sensor-ring r2" cx="77" cy="0" r="7"/>' +
+    '<circle class="sensor-tip t1" cx="24.5" cy="1.5" r="5"/><circle class="sensor-tip t2" cx="77" cy="0" r="5"/></svg>';
+  function avatarHTML(who, sensing) {
+    var c = CHARA[who];
+    var a = '<span class="avatar avatar-' + who + '" aria-hidden="true">' +
+      (c.img ? '<img src="' + c.img + '" alt="">' : '<span class="avatar-ph">' + c.initial + '</span>') + '</span>';
+    if (who === 'nene' && sensing) return '<span class="avatar-wrap is-sensing" aria-hidden="true">' + a + SENSOR_SVG + '</span>';
+    return a;
+  }
+  function sayHTML(who, text, opts) {
+    var o = opts || {};
+    return '<div class="say say-' + who + (o.small ? ' say-small' : '') + (o.fresh ? ' just-said' : '') + '">' + avatarHTML(who, o.sensing) +
+      '<p class="bubble"><span class="bubble-name">' + esc(CHARA[who].name) + '</span>' + rb(text) +
+      (o.sub ? '<span class="say-sub">' + o.sub + '</span>' : '') + '</p></div>';
+  }
+  function greet() {
+    var h = new Date().getHours();
+    return h >= 4 && h < 10 ? 'おはよう！' : (h >= 10 && h < 17 ? 'こんにちは！' : 'こんばんは！');
+  }
+  var MONE_REACT = {
+    wake: '{起|お}きられたね！ だーいせいかい！',
+    light: 'おひさま あびたね。からだの {時計|とけい}が ととのいやすいんだよ。',
+    meal: 'ごはん {食|た}べたね。いいね！',
+    move: 'うごけたね！ {少|すこ}しで じゅうぶんなんだよ。',
+    bath: 'さっぱりしたね。だーいせいかい！',
+    night: 'ねる じゅんび できたね。えらいんだよ。',
+    rest: '{休|やす}めたね。{休|やす}むのも だいじな ことなんだよ。'
+  };
+  var lastReact = null;
+  var lastMoneLine = '';
+  function moneLine(rec, n) {
+    if (n >= 5) return '6{割|わり}で いい、それが {最強|さいきょう}なんだよ。むりは しないでね。';
+    if (lastReact && rec[lastReact]) return MONE_REACT[lastReact];
+    if (rec.rest) return '{休|やす}むのも だいじな ことなんだよ。だーいせいかい！';
+    if (n === 0) return greet() + ' ひとつ おせたら、だーいせいかい！';
+    if (n === 1) return 'だーいせいかい！ きょうは もう じゅうぶんなんだよ。';
+    return 'いいね！ その ちょうしなんだよ。';
+  }
+
+  // ===== 日づけ =====
+  function shifted(d) { return new Date(d.getTime() - DAY_START_HOUR * 3600000); }
+  function keyOf(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function todayKey() { return keyOf(shifted(new Date())); }
+  function dayAt(back) {
+    var b = shifted(new Date());
+    return new Date(b.getFullYear(), b.getMonth(), b.getDate() - back);
+  }
+  function nowHM() { var n = new Date(); return pad(n.getHours()) + ':' + pad(n.getMinutes()); }
+  function hmToMin(hm) { var p = String(hm).split(':'); return Number(p[0]) * 60 + Number(p[1]); }
+  function minToHM(m) { return Math.floor(m / 60) + ':' + pad(m % 60); }
+
+  // ===== きろく =====
+  var LS_KEY = 'furari-lantern-v1';
+  function defaults() { return { v: 1, updatedAt: 0, days: {}, rooms: {}, ruby: true, size: 'm' }; }
+  function isObj(v) { return v && typeof v === 'object' && !Array.isArray(v); }
+  function normalize(s) {
+    var d = defaults();
+    if (!isObj(s)) return d;
+    var days = {};
+    if (isObj(s.days)) {
+      Object.keys(s.days).forEach(function (k) {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(k) || !isObj(s.days[k])) return;
+        var src = s.days[k], out = {};
+        ITEM_IDS.forEach(function (id) {
+          if (typeof src[id] === 'string' && /^\d{1,2}:\d{2}$/.test(src[id])) out[id] = src[id];
+        });
+        if (Object.keys(out).length) days[k] = out;
+      });
+    }
+    var rooms = {};
+    if (isObj(s.rooms)) {
+      FLOORS.forEach(function (f) {
+        f.rooms.forEach(function (r) {
+          var v = s.rooms[r.id];
+          if (isObj(v)) rooms[r.id] = { at: typeof v.at === 'string' ? v.at : '', tried: !!v.tried };
+        });
+      });
+    }
+    return {
+      v: 1,
+      updatedAt: typeof s.updatedAt === 'number' ? s.updatedAt : 0,
+      days: days,
+      rooms: rooms,
+      ruby: s.ruby !== false,
+      size: s.size === 'l' ? 'l' : 'm'
+    };
+  }
+  function loadLocal() {
+    try {
+      var raw = window.localStorage.getItem(LS_KEY);
+      return raw ? normalize(JSON.parse(raw)) : null;
+    } catch (e) { return null; }
+  }
+  function saveLocal() {
+    try { window.localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch (e) { /* この端末では保存できない */ }
+  }
+  function hasRecords(s) { return Object.keys(s.days).length > 0 || Object.keys(s.rooms).length > 0; }
+
+  var state = loadLocal() || defaults();
+
+  // アカウントに保存できるときは、本人だけが見られる場所（data/users/<id>/）にも保存する
+  var remote = { mode: 'local', ref: null, writing: false, dirty: false, timer: 0, retried: false };
+  function persist() {
+    state.updatedAt = Date.now();
+    saveLocal();
+    if (remote.ref) {
+      remote.dirty = true;
+      clearTimeout(remote.timer);
+      remote.timer = setTimeout(flushRemote, 900);
+    }
+  }
+  function flushRemote() {
+    if (!remote.ref || remote.writing || !remote.dirty) return;
+    remote.writing = true;
+    remote.dirty = false;
+    var body = { v: 1, state: JSON.parse(JSON.stringify(state)) };
+    remote.ref.set(body).then(function () {
+      remote.writing = false;
+      remote.retried = false;
+      if (remote.dirty) flushRemote();
+    }, function (e) {
+      remote.writing = false;
+      if (e && e.code === 'unavailable' && !remote.retried) {
+        remote.retried = true;
+        remote.dirty = true;
+        setTimeout(flushRemote, 1500 + Math.floor(Math.random() * 1500));
+        return;
+      }
+      remote.ref = null;
+      setMode('local');
+    });
+  }
+  function adopt(r) {
+    state = r;
+    saveLocal();
+    renderAll();
+  }
+  function pullRemote() {
+    if (!remote.ref || remote.writing || remote.dirty) return;
+    remote.ref.get().then(function (snap) {
+      var body = snap.exists ? snap.data() : null;
+      var r = body && body.state ? normalize(body.state) : null;
+      if (r && r.updatedAt > state.updatedAt) adopt(r);
+    }, function () { /* 次に開いたときにまた読む */ });
+  }
+  function connectRemote() {
+    var c = window.claude;
+    if (!c || typeof c.use !== 'function') { setMode('local'); return; }
+    setMode('connecting');
+    Promise.all([c.use('db'), c.use('user')]).then(function (res) {
+      var db = res[0], user = res[1];
+      if (!db || !user) { setMode('local'); return null; }
+      return user.id().then(function (uid) {
+        if (!uid) { setMode('local'); return null; }
+        var ref = db.doc('data/users/' + uid + '/lantern');
+        return ref.get().then(function (snap) {
+          var body = snap.exists ? snap.data() : null;
+          var r = body && body.state ? normalize(body.state) : null;
+          remote.ref = ref;
+          setMode('account');
+          if (r && r.updatedAt > state.updatedAt) {
+            adopt(r);
+          } else if (hasRecords(state) && (!r || state.updatedAt > r.updatedAt)) {
+            remote.dirty = true;
+            flushRemote();
+          }
+        });
+      });
+    }).catch(function () { remote.ref = null; setMode('local'); });
+  }
+  function setMode(m) {
+    remote.mode = m;
+    var el = $('#store-where');
+    if (!el) return;
+    if (m === 'account') el.innerHTML = rb('ほぞんさき：あなたの アカウント。{一風|いっぷう}ラボにも、ほかの {人|ひと}にも {見|み}えません。');
+    else if (m === 'connecting') el.innerHTML = rb('ほぞんさき：この {端末|たんまつ}（アカウントに つないで います）');
+    else el.innerHTML = rb('ほぞんさき：この {端末|たんまつ}の なかだけ。{一風|いっぷう}ラボには とどきません。');
+  }
+
+  // ===== 数える =====
+  function dayRec(key) { return state.days[key] || {}; }
+  function countDay(rec) { var n = 0; ITEM_IDS.forEach(function (id) { if (rec[id]) n++; }); return n; }
+  function totalLights() { var n = 0; Object.keys(state.days).forEach(function (k) { n += countDay(state.days[k]); }); return n; }
+  function rankOf(total) { var r = 0; RANKS.forEach(function (x, i) { if (total >= x.min) r = i; }); return r; }
+  function clearedIn(f) { var n = 0; f.rooms.forEach(function (r) { if (state.rooms[r.id]) n++; }); return n; }
+  function isOpen(i) { return i === 0 || clearedIn(FLOORS[i - 1]) > 0; }
+  function findRoom(id) {
+    for (var i = 0; i < FLOORS.length; i++) {
+      for (var j = 0; j < FLOORS[i].rooms.length; j++) {
+        if (FLOORS[i].rooms[j].id === id) return { floor: FLOORS[i], fi: i, room: FLOORS[i].rooms[j], index: j };
+      }
+    }
+    return null;
+  }
+  function recommended() {
+    for (var i = 0; i < FLOORS.length; i++) {
+      if (!isOpen(i)) break;
+      for (var j = 0; j < FLOORS[i].rooms.length; j++) {
+        if (!state.rooms[FLOORS[i].rooms[j].id]) return FLOORS[i].rooms[j].id;
+      }
+    }
+    return null;
+  }
+  function openCount() { var n = 0; FLOORS.forEach(function (f, i) { if (isOpen(i)) n++; }); return n; }
+  function titlesGot() { return FLOORS.filter(function (f) { return clearedIn(f) === f.rooms.length; }).map(function (f) { return f.id; }); }
+  function classRooms(cl) {
+    var n = 0, t = 0;
+    for (var i = cl.from; i <= cl.to; i++) { n += clearedIn(FLOORS[i]); t += FLOORS[i].rooms.length; }
+    return { n: n, t: t };
+  }
+  function classesDone() { return CLASSES.filter(function (cl) { var r = classRooms(cl); return r.n === r.t; }).map(function (cl) { return cl.id; }); }
+  function classOf(fi) {
+    for (var i = 0; i < CLASSES.length; i++) { if (fi >= CLASSES[i].from && fi <= CLASSES[i].to) return CLASSES[i]; }
+    return CLASSES[0];
+  }
+
+  // ===== 画面 =====
+  function renderSettings() {
+    var root = document.documentElement;
+    root.classList.toggle('no-ruby', !state.ruby);
+    root.classList.toggle('fs-l', state.size === 'l');
+    $('#ruby-on').setAttribute('aria-pressed', String(state.ruby));
+    $('#ruby-off').setAttribute('aria-pressed', String(!state.ruby));
+    $('#size-m').setAttribute('aria-pressed', String(state.size !== 'l'));
+    $('#size-l').setAttribute('aria-pressed', String(state.size === 'l'));
+  }
+
+  var justLit = null;
+  var editingWake = false;
+  function renderToday() {
+    var key = todayKey();
+    var rec = dayRec(key);
+    var n = countDay(rec);
+    var total = totalLights();
+    var rank = rankOf(total);
+    var t = dayAt(0);
+    $('#today-date').textContent = (t.getMonth() + 1) + '/' + t.getDate() + '（' + WD[t.getDay()] + '）';
+    $('#lamp').innerHTML = lanternSVG(rank, n);
+    $('#lamp-num').textContent = String(n);
+    $('#lamp-rank').innerHTML = rb('いまの {灯|あか}り：') + '<span class="rank-name">' + esc(RANKS[rank].name) + '</span>';
+    var next = RANKS[rank + 1];
+    $('#lamp-next').innerHTML = rb('ぜんぶで ' + total + 'こ。') + ' ' +
+      (next ? rb('「' + next.name + '」まで あと ' + (next.min - total) + 'こ') : rb('まわりも てらせる {明|あか}るさ。'));
+    var line = moneLine(rec, n);
+    $('#mone-say').innerHTML = sayHTML('mone', line, { fresh: line !== lastMoneLine && lastMoneLine !== '' });
+    lastMoneLine = line;
+
+    var html = '';
+    RHYTHM.forEach(function (it) {
+      var on = !!rec[it.id];
+      html += '<li' + (it.rest ? ' class="rest-row"' : '') + '>' +
+        (it.rest ? '<p class="rest-k yasashii">' + rb('つかれた {日|ひ}は、これも {灯|あか}りに なる') + '</p>' : '') +
+        '<button type="button" class="rh-btn' + (it.rest ? ' rh-rest' : '') + (justLit === it.id ? ' just-lit' : '') + '" data-item="' + it.id + '" aria-pressed="' + on + '">' +
+        '<span class="rh-ic">' + ICON[it.icon] + '</span>' +
+        '<span class="rh-text">' + rb(it.label) + '</span>' +
+        (on ? '<span class="rh-time">' + esc(rec[it.id]) + '</span>' : '<span class="rh-time rh-plus" aria-hidden="true">+1</span>') + '</button>';
+      if (it.id === 'wake' && on) {
+        html += '<div class="wake-edit">' + (editingWake
+          ? '<label class="sr-only" for="wake-input">おきた じかん</label><input class="time-in" type="time" id="wake-input" value="' + esc(pad(Number(rec.wake.split(':')[0])) + ':' + rec.wake.split(':')[1]) + '"><button type="button" class="small-btn" id="wake-save">きめる</button><button type="button" class="link-btn" id="wake-cancel">やめる</button>'
+          : '<button type="button" class="link-btn" id="wake-fix">' + rb('{起|お}きた {時間|じかん}を なおす') + '</button>') + '</div>';
+      }
+      html += '</li>';
+    });
+    $('#rhythm').innerHTML = html;
+    justLit = null;
+
+    var rid = recommended();
+    var box = $('#next-room');
+    if (rid) {
+      var f = findRoom(rid);
+      box.innerHTML = sayHTML('nene', 'ピコピコ！ きょうの へや、みつけたよ！', {
+        sub: '<span class="next-name">' + rb(f.room.name) + '</span><span class="next-k">' + rb(f.floor.no + ' ・ 1{分|ぷん}') + '</span>',
+        sensing: true }) +
+        '<button type="button" class="go-btn" data-room="' + rid + '">はいる</button>';
+    } else {
+      box.innerHTML = sayHTML('nene', 'ピコピコ！ ぜんぶの へやを クリア！ つぎの {階|かい}は じゅんびちゅうだよ。') +
+        '<button type="button" class="go-btn" data-scroll="cave">ちずを みる</button>';
+    }
+  }
+
+  function doorHTML(r, open, rec) {
+    var st = state.rooms[r.id];
+    var label = baseText(r.name) + (st ? '（クリア）' : open ? (rec ? '（おすすめ）' : '') : '（まだ ひらいて いない）');
+    return '<button type="button" class="door' + (st ? ' is-clear' : '') + (rec ? ' is-rec' : '') + '" data-room="' + r.id + '"' + (open ? '' : ' disabled') + ' aria-label="' + esc(label) + '">' +
+      (rec ? '<span class="door-rec" aria-hidden="true">おすすめ</span>' : '') +
+      '<span class="door-arch">' + (st ? HANAMARU : open ? ICON.keyhole : ICON.lock) +
+      (st && st.tried ? '<span class="door-star" aria-hidden="true">★</span>' : '') +
+      (rec ? '<span class="door-nene">' + avatarHTML('nene', true) + '</span>' : '') + '</span>' +
+      '<span class="door-name" aria-hidden="true">' + rb(r.short) + '</span></button>';
+  }
+  function renderDungeon() {
+    var rid = recommended();
+    var html = '';
+    FLOORS.forEach(function (f, i) {
+      var open = isOpen(i);
+      var c = clearedIn(f);
+      var cl = classOf(i);
+      if (i === cl.from) {
+        var cr = classRooms(cl), full = cr.n === cr.t;
+        html += '<li class="class-head' + (full ? ' is-full' : '') + '">' +
+          '<div><p class="class-k">' + rb(cl.name) + ' ・ ' + cl.range + '</p>' +
+          '<h3 class="class-name">' + rb(cl.theme) + '</h3>' +
+          '<p class="class-goal">' + rb('めざす：' + cl.goal) + '</p></div>' +
+          '<span class="class-count">' + (full ? rb(cl.clear) : cr.n + '/' + cr.t) + '</span></li>';
+      }
+      html += '<li class="floor' + (open ? '' : ' is-locked') + '">' +
+        '<div class="floor-head"><span class="floor-no">' + f.no + '</span>' +
+        '<div><h3 class="floor-name">' + rb(f.name) + '</h3><p class="floor-sub">' + rb(f.sub) + '</p></div>' +
+        '<span class="floor-count' + (c === f.rooms.length ? ' is-full' : '') + '">' + c + '/' + f.rooms.length + '</span></div>' +
+        (open ? '' : '<p class="floor-lock yasashii">' + rb('ひとつ うえの {階|かい}で 1へや クリアすると ひらく') + '</p>') +
+        '<div class="doors">' + f.rooms.map(function (r) { return doorHTML(r, open, r.id === rid); }).join('') + '</div></li>';
+    });
+    html += '<li class="floor is-locked is-sealed"><div class="floor-head"><span class="floor-no">' + SEALED.no + '</span>' +
+      '<div><h3 class="floor-name">' + rb(SEALED.name) + '</h3><p class="floor-sub">' + rb(SEALED.sub) + '</p></div>' +
+      '<span class="floor-count" aria-hidden="true">' + ICON.lock + '</span></div><p class="floor-lock yasashii">' + rb(SEALED.note) + '</p></li>';
+    $('#floors').innerHTML = html;
+    $('#nene-cave').innerHTML = sayHTML('nene', 'ピコピコ！ ダンジョンは 3クラス・9{階|かい}。へやに はいると ワンポイントが ひとつ。よむだけでも クリアだよ。1へや クリアで、つぎの {階|かい}への かいだんが あらわれるよ！');
+    var reach = [38, 52, 68, 88][rankOf(totalLights())];
+    $('#cave').style.setProperty('--reach', reach + '%');
+  }
+
+  function renderWeek() {
+    var html = '';
+    for (var back = 6; back >= 0; back--) {
+      var d = dayAt(back), key = keyOf(d), rec = dayRec(key), n = countDay(rec);
+      var dots = '';
+      ITEM_IDS.forEach(function (id) {
+        if (rec[id]) dots += '<span class="wd-dot' + (id === 'rest' ? ' is-rest' : '') + '"></span>';
+      });
+      var label = (d.getMonth() + 1) + '月' + d.getDate() + '日、灯り' + n + 'こ' + (rec.rest ? '、休んだ日' : '') + (rec.wake ? '、' + rec.wake + 'に起きた' : '');
+      html += '<div class="wday' + (back === 0 ? ' is-today' : '') + '" role="img" aria-label="' + esc(label) + '">' +
+        '<span class="wd-name" aria-hidden="true">' + WD[d.getDay()] + '</span>' +
+        '<span class="wd-date" aria-hidden="true">' + d.getDate() + '</span>' +
+        '<span class="wd-dots" aria-hidden="true">' + dots + '</span>' +
+        '<span class="wd-wake" aria-hidden="true">' + (rec.wake ? esc(rec.wake) : '—') + '</span></div>';
+    }
+    $('#week-strip').innerHTML = html;
+    renderWakeChart();
+
+    var cleared = 0, all = 0;
+    FLOORS.forEach(function (f) { cleared += clearedIn(f); all += f.rooms.length; });
+    var restDays = Object.keys(state.days).filter(function (k) { return state.days[k].rest; }).length;
+    $('#totals').innerHTML =
+      '<div><dt>' + rb('ぜんぶの {灯|あか}り') + '</dt><dd>' + totalLights() + 'こ</dd></div>' +
+      '<div><dt>' + rb('クリアした へや') + '</dt><dd>' + cleared + ' / ' + all + '</dd></div>' +
+      '<div><dt>' + rb('きろくした {日|ひ}') + '</dt><dd>' + Object.keys(state.days).length + rb('{日|にち}') + '</dd></div>' +
+      '<div><dt>' + rb('{休|やす}めた {日|ひ}') + '</dt><dd>' + restDays + rb('{日|にち}') + '</dd></div>';
+    $('#class-prog').innerHTML = CLASSES.map(function (cl) {
+      var r = classRooms(cl), full = r.n === r.t;
+      return '<li class="cp-row' + (full ? ' is-full' : '') + '">' +
+        '<span class="cp-name">' + rb(cl.name) + '</span>' +
+        '<span class="cp-bar" aria-hidden="true"><span class="cp-fill" style="width:' + Math.round(100 * r.n / r.t) + '%"></span></span>' +
+        '<span class="cp-val">' + (full ? rb(cl.clear) : r.n + ' / ' + r.t) + '</span></li>';
+    }).join('');
+    var got = titlesGot();
+    $('#titles').innerHTML = FLOORS.map(function (f) {
+      var has = got.indexOf(f.id) >= 0;
+      return '<li class="' + (has ? 'is-got' : '') + '">' + (has ? rb(f.title) : f.no + ' ？？？') + '</li>';
+    }).join('');
+  }
+
+  function renderWakeChart() {
+    var fig = $('#wake-fig');
+    var rows = [];
+    for (var back = 6; back >= 0; back--) {
+      var d = dayAt(back), rec = dayRec(keyOf(d));
+      rows.push({ i: 6 - back, d: d, wake: rec.wake ? hmToMin(rec.wake) : null, hm: rec.wake || null });
+    }
+    var have = rows.filter(function (r) { return r.wake !== null; });
+    var cap = '<figcaption>' + rb('{起|お}きた {時間|じかん}の ならび') + '</figcaption>';
+    if (have.length < 2) {
+      fig.innerHTML = cap + '<p class="wake-empty yasashii">' + rb('「{起|お}きた」を 2{日|にち} おすと、ここに {時間|じかん}の ならびが {出|で}ます。そろって くると、{線|せん}が たいらに なります。') + '</p>';
+      return;
+    }
+    var lo = Math.min.apply(null, have.map(function (r) { return r.wake; }));
+    var hi = Math.max.apply(null, have.map(function (r) { return r.wake; }));
+    lo = Math.floor((lo - 30) / 60) * 60;
+    hi = Math.ceil((hi + 30) / 60) * 60;
+    if (hi - lo < 180) { var mid = (hi + lo) / 2; lo = Math.floor((mid - 90) / 60) * 60; hi = lo + 180; }
+    var W = 320, H = 150, L = 40, R = 14, T = 14, B = 24;
+    var X = function (i) { return L + (W - L - R) * i / 6; };
+    var Y = function (m) { return T + (H - T - B) * (m - lo) / (hi - lo); };
+    var step = (hi - lo) > 360 ? 120 : 60;
+    var g = '';
+    for (var m = lo; m <= hi; m += step) {
+      g += '<line class="ax-g" x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(m).toFixed(1) + '" y2="' + Y(m).toFixed(1) + '"/>' +
+        '<text class="ax-t" x="' + (L - 6) + '" y="' + (Y(m) + 4).toFixed(1) + '" text-anchor="end">' + minToHM(m) + '</text>';
+    }
+    var path = '', prev = null;
+    rows.forEach(function (r) {
+      if (r.wake === null) { prev = null; return; }
+      path += (prev === null ? 'M' : 'L') + X(r.i).toFixed(1) + ' ' + Y(r.wake).toFixed(1) + ' ';
+      prev = r;
+    });
+    var dots = '', xl = '';
+    rows.forEach(function (r) {
+      xl += '<text class="ax-t" x="' + X(r.i).toFixed(1) + '" y="' + (H - 6) + '" text-anchor="middle">' + (r.i === 6 ? 'きょう' : WD[r.d.getDay()]) + '</text>';
+      if (r.wake === null) return;
+      dots += '<circle class="wk-dot" cx="' + X(r.i).toFixed(1) + '" cy="' + Y(r.wake).toFixed(1) + '" r="5"/>';
+    });
+    var desc = have.map(function (r) { return WD[r.d.getDay()] + '曜 ' + r.hm; }).join('、');
+    fig.innerHTML = cap + '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc('起きた時間：' + desc) + '">' + g +
+      '<path class="wk-line" d="' + path + '"/>' + dots + xl + '</svg>';
+  }
+
+  function renderAll() {
+    renderSettings();
+    renderToday();
+    renderDungeon();
+    renderWeek();
+    setMode(remote.mode);
+  }
+
+  // ===== うごき =====
+  function toggleItem(id) {
+    var key = todayKey();
+    var rec = {};
+    var cur = dayRec(key);
+    Object.keys(cur).forEach(function (k) { rec[k] = cur[k]; });
+    if (rec[id]) { delete rec[id]; if (id === 'wake') editingWake = false; lastReact = null; }
+    else { rec[id] = nowHM(); justLit = id; lastReact = id; }
+    if (Object.keys(rec).length) state.days[key] = rec; else delete state.days[key];
+    persist();
+    renderToday();
+    renderDungeon();
+    renderWeek();
+    var btn = document.querySelector('.rh-btn[data-item="' + id + '"]');
+    if (btn) btn.focus();
+  }
+  function saveWake() {
+    var input = $('#wake-input');
+    if (!input || !/^\d{2}:\d{2}$/.test(input.value)) { editingWake = false; renderToday(); return; }
+    var key = todayKey();
+    var rec = {}, cur = dayRec(key);
+    Object.keys(cur).forEach(function (k) { rec[k] = cur[k]; });
+    rec.wake = input.value;
+    state.days[key] = rec;
+    editingWake = false;
+    persist();
+    renderToday();
+    renderWeek();
+    var fix = $('#wake-fix');
+    if (fix) fix.focus();
+  }
+
+  // へや
+  var sheet = $('#sheet');
+  var currentRoom = null;
+  function openRoom(id) {
+    var f = findRoom(id);
+    if (!f || !isOpen(f.fi)) return;
+    currentRoom = id;
+    stopSpeech();
+    $('#sheet-eyebrow').innerHTML = rb(classOf(f.fi).name) + ' ・ ' + f.floor.no + ' ' + rb(f.floor.name) + ' ・ へや ' + (f.index + 1);
+    $('#sheet-title').innerHTML = rb(f.room.name);
+    $('#sheet-point').innerHTML = rb(f.room.point);
+    $('#sheet-why').innerHTML = rb(f.room.why);
+    $('#sheet-try').innerHTML = rb(f.room.tryit);
+    var src = f.room.src ? SRC[f.room.src] : null;
+    var srcEl = $('#sheet-src');
+    srcEl.innerHTML = src ? 'でどころ：<a href="' + esc(src.url) + '" target="_blank" rel="noopener">' + esc(src.label) + '</a>' : '';
+    srcEl.hidden = !src;
+    setReadBtn(false);
+    renderActs(false);
+    if (typeof sheet.showModal === 'function') {
+      if (!sheet.open) sheet.showModal();
+    } else {
+      sheet.setAttribute('open', '');
+    }
+    var inner = sheet.querySelector('.sheet-in');
+    if (inner) inner.scrollTop = 0;
+    $('#sheet-title').setAttribute('tabindex', '-1');
+    $('#sheet-title').focus();
+  }
+  function renderActs(pop) {
+    var st = state.rooms[currentRoom];
+    var f = findRoom(currentRoom);
+    var box = $('#sheet-acts');
+    if (!st) {
+      box.innerHTML = '<div class="sheet-acts">' +
+        '<button type="button" class="act-btn" data-clear="read">よんだ<small>これで クリア</small></button>' +
+        '<button type="button" class="act-btn primary" data-clear="tried">やってみた！<small>クリア ＋ ★</small></button></div>';
+      return;
+    }
+    var more = f.room.link ? '<button type="button" class="act-btn" data-goto="' + f.room.link + '">' + rb('{相談先|そうだんさき}を {見|み}る') + '</button>' : '';
+    box.innerHTML = '<div class="sheet-clear' + (pop ? ' pop' : '') + '">' + HANAMARU +
+      '<div><h3>へやを クリア！</h3>' +
+      (st.tried ? '' : '<button type="button" class="act-btn" data-clear="tried">やってみたら ★</button>') +
+      '</div></div>' +
+      '<div class="clear-say yasashii">' + sayHTML('mone', st.tried ? 'やってみたんだね。だーいせいかい！' : 'よんだだけでも だーいせいかい！ りっぱな 1{歩|ぽ}なんだよ。', { small: true, fresh: pop }) + '</div>' +
+      '<div class="sheet-acts">' + more + '<button type="button" class="act-btn' + (more ? '' : ' wide') + '" data-close="1">ちずに もどる</button></div>';
+  }
+  function clearRoom(kind) {
+    if (!currentRoom) return;
+    var beforeOpen = openCount();
+    var beforeTitles = titlesGot().length;
+    var beforeClasses = classesDone().length;
+    var cur = state.rooms[currentRoom];
+    state.rooms[currentRoom] = { at: (cur && cur.at) || todayKey(), tried: !!((cur && cur.tried) || kind === 'tried') };
+    persist();
+    renderActs(true);
+    renderToday();
+    renderDungeon();
+    renderWeek();
+    if (openCount() > beforeOpen) toast('ピコピコ！ つぎの {階|かい}への かいだんが あらわれたよ！', 'nene');
+    if (titlesGot().length > beforeTitles) {
+      var f = findRoom(currentRoom).floor;
+      toast('しょうごう『' + f.title + '』 ゲット！ だーいせいかい！', 'mone');
+    }
+    if (classesDone().length > beforeClasses) {
+      var cl = classOf(findRoom(currentRoom).fi);
+      toast(cl.name + ' クリア！ ' + cl.clear + ' だーいせいかい！', 'mone');
+    }
+    var first = sheet.querySelector('[data-clear], [data-close]');
+    if (first) first.focus();
+  }
+  function closeSheet() {
+    stopSpeech();
+    if (sheet.open) { if (typeof sheet.close === 'function') sheet.close(); else sheet.removeAttribute('open'); }
+  }
+
+  // よみあげ
+  var canSpeak = ('speechSynthesis' in window) && typeof window.SpeechSynthesisUtterance === 'function';
+  var speaking = false;
+  function setReadBtn(on) {
+    var b = $('#read-btn');
+    b.hidden = !canSpeak;
+    b.setAttribute('aria-pressed', String(on));
+    b.innerHTML = on ? ICON.stop + '<span>とめる</span>' : ICON.speaker + '<span>よみあげ</span>';
+  }
+  function stopSpeech() {
+    if (!canSpeak) return;
+    try { window.speechSynthesis.cancel(); } catch (e) { /* 何もしない */ }
+    speaking = false;
+    setReadBtn(false);
+  }
+  function speakRoom() {
+    if (!canSpeak || !currentRoom) return;
+    if (speaking) { stopSpeech(); return; }
+    var f = findRoom(currentRoom);
+    var parts = [f.room.name, 'ワンポイント。' + f.room.point, 'どうして。' + f.room.why, 'やってみる。' + f.room.tryit];
+    var u = new window.SpeechSynthesisUtterance(parts.map(readText).join('。 '));
+    u.lang = 'ja-JP';
+    u.rate = 0.9;
+    try {
+      var voices = window.speechSynthesis.getVoices() || [];
+      for (var i = 0; i < voices.length; i++) { if (/^ja/i.test(voices[i].lang)) { u.voice = voices[i]; break; } }
+    } catch (e) { /* 声が選べなくても読める */ }
+    u.onend = u.onerror = function () { speaking = false; setReadBtn(false); };
+    speaking = true;
+    setReadBtn(true);
+    try { window.speechSynthesis.speak(u); } catch (e) { speaking = false; setReadBtn(false); }
+  }
+
+  // お知らせ（2つ重なったら順番に出す）
+  var toastTimer = 0;
+  var toastQueue = [];
+  function toast(text, who) {
+    toastQueue.push({ text: text, who: who });
+    if (toastQueue.length === 1) showToast();
+  }
+  function showToast() {
+    var t = $('#toast');
+    var item = toastQueue[0];
+    if (!item) { t.hidden = true; return; }
+    t.innerHTML = '<span class="toast-in">' + (item.who ? avatarHTML(item.who, item.who === 'nene') : '') + '<span>' + rb(item.text) + '</span></span>';
+    t.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      toastQueue.shift();
+      if (toastQueue.length) showToast(); else t.hidden = true;
+    }, 3800);
+  }
+
+  // コピー
+  function copyText(text, btn, doneLabel) {
+    var orig = btn.textContent;
+    function done(ok) {
+      btn.textContent = ok ? doneLabel : 'えらんで コピーしてね';
+      setTimeout(function () { btn.textContent = orig; }, 2200);
+    }
+    try {
+      navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); });
+    } catch (e) { done(false); }
+  }
+
+  // ひっこし
+  function encodeState() {
+    var json = JSON.stringify(state);
+    return 'FRL1:' + btoa(unescape(encodeURIComponent(json)));
+  }
+  function decodeState(code) {
+    var c = String(code).trim();
+    if (c.indexOf('FRL1:') !== 0) return null;
+    try { return normalize(JSON.parse(decodeURIComponent(escape(atob(c.slice(5)))))); } catch (e) { return null; }
+  }
+  var pending = null;
+  function askConfirm(text, action) {
+    pending = action;
+    $('#confirm-text').innerHTML = rb(text);
+    $('#confirm').hidden = false;
+    $('#confirm-yes').focus();
+  }
+  function backupMsg(text, ok) {
+    var m = $('#backup-msg');
+    m.className = ok ? 'msg-ok' : 'msg-bad';
+    m.innerHTML = rb(text);
+  }
+
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest ? e.target.closest('button, a') : null;
+    if (!t) return;
+    if (t.dataset.ruby) { state.ruby = t.dataset.ruby === 'on'; persist(); renderSettings(); return; }
+    if (t.dataset.size) { state.size = t.dataset.size === 'l' ? 'l' : 'm'; persist(); renderSettings(); return; }
+    if (t.dataset.item) { toggleItem(t.dataset.item); return; }
+    if (t.id === 'wake-fix') { editingWake = true; renderToday(); var w = $('#wake-input'); if (w) w.focus(); return; }
+    if (t.id === 'wake-save') { saveWake(); return; }
+    if (t.id === 'wake-cancel') { editingWake = false; renderToday(); var fx = $('#wake-fix'); if (fx) fx.focus(); return; }
+    if (t.dataset.room) { openRoom(t.dataset.room); return; }
+    if (t.dataset.scroll) { var s = document.getElementById(t.dataset.scroll); if (s) s.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+    if (t.dataset.clear) { clearRoom(t.dataset.clear); return; }
+    if (t.dataset.close || t.id === 'sheet-close') { closeSheet(); return; }
+    if (t.dataset.goto) {
+      closeSheet();
+      var g = document.querySelector(t.dataset.goto);
+      if (g) { g.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      return;
+    }
+    if (t.id === 'read-btn') { speakRoom(); return; }
+    if (t.id === 'copy-dial') { copyText('0570-064-556', t, 'コピーしました'); return; }
+    if (t.id === 'export-btn') {
+      var area = $('#export-code');
+      area.value = encodeState();
+      area.hidden = false;
+      $('#copy-code').hidden = false;
+      area.focus();
+      area.select();
+      return;
+    }
+    if (t.id === 'copy-code') { copyText($('#export-code').value, t, 'コピーしました'); return; }
+    if (t.id === 'import-btn') {
+      var s2 = decodeState($('#import-code').value);
+      if (!s2) { backupMsg('よみこめませんでした。FRL1: から はじまる もじを、ぜんぶ はりつけて ください。', false); return; }
+      askConfirm('いまの きろくを、はりつけた きろくで おきかえます。', function () {
+        var keep = { ruby: state.ruby, size: state.size };
+        state = s2;
+        state.ruby = keep.ruby;
+        state.size = keep.size;
+        persist();
+        renderAll();
+        $('#import-code').value = '';
+        backupMsg('よみこみました。', true);
+      });
+      return;
+    }
+    if (t.id === 'reset-btn') {
+      askConfirm('きろくを ぜんぶ けして、さいしょから やりなおします。', function () {
+        var keep = { ruby: state.ruby, size: state.size };
+        state = defaults();
+        state.ruby = keep.ruby;
+        state.size = keep.size;
+        persist();
+        renderAll();
+        backupMsg('さいしょから に しました。', true);
+      });
+      return;
+    }
+    if (t.id === 'confirm-yes') { $('#confirm').hidden = true; var fn = pending; pending = null; if (fn) fn(); return; }
+    if (t.id === 'confirm-no') { $('#confirm').hidden = true; pending = null; backupMsg('やめました。', true); return; }
+  });
+
+  sheet.addEventListener('click', function (e) { if (e.target === sheet) closeSheet(); });
+  sheet.addEventListener('close', function () {
+    stopSpeech();
+    var back = currentRoom ? document.querySelector('.door[data-room="' + currentRoom + '"]') : null;
+    if (back && !back.disabled) back.focus();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && e.target && e.target.id === 'wake-input') { e.preventDefault(); saveWake(); }
+  });
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') {
+      renderToday();
+      renderWeek();
+      pullRemote();
+    }
+  });
+
+  $('#sheet-close').innerHTML = ICON.close;
+  $('#hero-duo').innerHTML = avatarHTML('nene') + avatarHTML('mone') + '<span>あんない：ミニねね・ミニもね</span>';
+  renderAll();
+  connectRemote();
+})();
+</script>
+</body>
+</html>
