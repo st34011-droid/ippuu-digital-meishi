@@ -525,6 +525,7 @@ h2, h3 { text-wrap: balance; }
 .fb-nudge { margin-top: 1rem; padding: .8rem .9rem; border-radius: var(--radius); background: var(--accent-tint); display: grid; gap: .6rem; }
 .fb-say { margin-top: .8rem; }
 .fb { margin-top: 1rem; display: grid; gap: 1.1rem; }
+.fb-qs { display: grid; gap: 1.2rem; }
 .fb-q { margin: 0; padding: 0; border: 0; min-width: 0; display: grid; gap: .45rem; }
 .fb-label { padding: 0; font-weight: 700; }
 .fb-text, .fb-input { width: 100%; padding: .55rem .75rem; border-radius: 10px; border: 1.5px solid var(--line); background: var(--surface); color: var(--fg); font: inherit; font-size: 1rem; line-height: 1.7; }
@@ -826,45 +827,14 @@ a.small-btn { display: inline-flex; align-items: center; justify-content: center
 
     <section class="sec kansou" id="kansou" aria-labelledby="kansou-h">
       <h2 class="sec-h" id="kansou-h">かんそうを おくる</h2>
-      <p class="sec-note yasashii">1<ruby>週間<rt>しゅうかん</rt></ruby>くらい つかったら、おしえてね。こたえられる ものだけで だいじょうぶ。こえで <ruby>入力<rt>にゅうりょく</rt></ruby>しても OK。</p>
+      <p class="sec-note yasashii">1<ruby>週間<rt>しゅうかん</rt></ruby>くらい つかったら、おしえてね。ボタンを えらぶ だけ。こたえられる ものだけで だいじょうぶ。</p>
       <div class="fb-say yasashii" id="fb-say"></div>
       <form class="fb" id="fb-form" novalidate>
+        <div class="fb-qs" id="fb-qs"></div>
         <div class="fb-q">
-          <label class="fb-label yasashii" for="fb-q1">1. <ruby>何日<rt>なんにち</rt></ruby>くらい、どんな ときに つかいましたか？</label>
-          <textarea class="fb-text" id="fb-q1" rows="2"></textarea>
+          <label class="fb-label yasashii" for="fb-note">ほかに なにか あれば（じゆうに。こえで <ruby>入力<rt>にゅうりょく</rt></ruby>しても OK）</label>
+          <textarea class="fb-text" id="fb-note" rows="3"></textarea>
         </div>
-        <div class="fb-q">
-          <label class="fb-label yasashii" for="fb-q2">2. わかりにくかった ところ、つかいにくかった ところは ありますか？</label>
-          <textarea class="fb-text" id="fb-q2" rows="2"></textarea>
-        </div>
-        <div class="fb-q">
-          <label class="fb-label yasashii" for="fb-q3">3. つかって みて、<ruby>気持<rt>きも</rt></ruby>ちや くらしに <ruby>変化<rt>へんか</rt></ruby>は ありましたか？（なければ「なし」で OK）</label>
-          <textarea class="fb-text" id="fb-q3" rows="2"></textarea>
-        </div>
-        <fieldset class="fb-q">
-          <legend class="fb-label yasashii">4. これからも つかいたいと おもいますか？</legend>
-          <div class="fb-choices">
-            <label><input type="radio" name="fb-q4" id="fb-q4-a" value="使いたい">つかいたい</label>
-            <label><input type="radio" name="fb-q4" id="fb-q4-b" value="どちらでもない">どちらでもない</label>
-            <label><input type="radio" name="fb-q4" id="fb-q4-c" value="使わない">つかわない</label>
-          </div>
-          <label class="fb-sub yasashii" for="fb-q4r">よければ りゆうも</label>
-          <textarea class="fb-text" id="fb-q4r" rows="2"></textarea>
-        </fieldset>
-        <div class="fb-q">
-          <label class="fb-label yasashii" for="fb-q5">5. 「ここが かわったら、もっと つかいたい」と おもう ところは ありますか？</label>
-          <textarea class="fb-text" id="fb-q5" rows="2"></textarea>
-        </div>
-        <fieldset class="fb-q">
-          <legend class="fb-label yasashii">さいごに かくにん</legend>
-          <p class="fb-sub yasashii">この かんそうを、なまえを ださずに コンテストの おうぼ しょるいに つかっても いいですか？</p>
-          <div class="fb-choices">
-            <label><input type="radio" name="fb-ok" id="fb-ok-a" value="いい">いい</label>
-            <label><input type="radio" name="fb-ok" id="fb-ok-b" value="使わないで">つかわないで</label>
-          </div>
-          <label class="fb-sub yasashii" for="fb-who">かいても いいなら、<ruby>年代<rt>ねんだい</rt></ruby>と どんな <ruby>立場<rt>たちば</rt></ruby>か（れい：40<ruby>代<rt>だい</rt></ruby>・B<ruby>型<rt>がた</rt></ruby>に かよって いる）</label>
-          <input class="fb-input" type="text" id="fb-who" autocomplete="off">
-        </fieldset>
         <label class="fb-check yasashii" for="fb-stats"><input type="checkbox" id="fb-stats" checked><span>つかった きろくの かず（きろくした <ruby>日<rt>ひ</rt></ruby>・<ruby>灯<rt>あか</rt></ruby>りの ごうけい・クリアした へや）も いっしょに おくる</span></label>
         <div class="fb-q">
           <p class="fb-sub yasashii" id="fb-prev-h">おくる ぶん（ここに でている ものだけが とどきます）</p>
@@ -1373,7 +1343,6 @@ a.small-btn { display: inline-flex; align-items: center; justify-content: center
 
   // ===== かんそう（アンケート）：答えは この端末に下書きとして残し、とどくのは本人が おくった ときだけ =====
   var FB_KEY = 'furari-lantern-fb-v1';
-  var FB_TEXTS = ['q1', 'q2', 'q3', 'q4r', 'q5', 'who'];
   var fb = loadFb();
   var fbTimer = 0;
   function loadFb() {
@@ -1383,19 +1352,53 @@ a.small-btn { display: inline-flex; align-items: center; justify-content: center
     } catch (e) { return {}; }
   }
   function saveFb() { try { window.localStorage.setItem(FB_KEY, JSON.stringify(fb)); } catch (e) { /* 下書きは のこせない */ } }
+  // 質問は ボタンで えらぶ（ひとつだけ＝one、いくつでも＝そのほか）。none は「ほかと いっしょに えらべない」こたえ
+  var FB_QS = [
+    { id: 'days', one: true, q: '1. {何日|なんにち}くらい つかいましたか？',
+      o: [['1日', '1{日|にち}'], ['2〜3日', '2〜3{日|にち}'], ['4〜6日', '4〜6{日|にち}'], ['7日以上', '7{日|にち} いじょう']] },
+    { id: 'when', q: '2. どんな ときに つかいましたか？（いくつでも）',
+      o: [['朝起きたとき', 'あさ おきた とき'], ['昼間', 'ひるま'], ['寝る前', 'ねる まえ'], ['疲れたとき', 'つかれた とき'], ['気が向いたとき', 'きが むいた とき']] },
+    { id: 'hard', q: '3. わかりにくかった ところは？（いくつでも）', none: '特になし',
+      o: [['特になし', 'とくに なし'], ['灯りのつけ方', '{灯|あか}りの つけかた'], ['ダンジョンの進み方', 'ダンジョンの すすみかた'], ['文字が読みにくい', 'もじが よみにくい'], ['どこを押せばいいか', 'どこを おせば いいか']] },
+    { id: 'feel', q: '4. つかって みて、どうでしたか？（いくつでも）', none: '特に変わらない',
+      o: [['気持ちが少し楽になった', '{気持|きも}ちが すこし らくに なった'], ['休んでもいいと思えた', '{休|やす}んでも いいと おもえた'], ['起きるきっかけになった', 'おきる きっかけに なった'], ['生活リズムを気にするようになった', 'せいかつリズムを きに するように なった'], ['ちょっと大変だった', 'ちょっと たいへんだった'], ['特に変わらない', 'とくに かわらない']] },
+    { id: 'again', one: true, q: '5. これからも つかいたいと おもいますか？',
+      o: [['使いたい', 'つかいたい'], ['どちらでもない', 'どちらでもない'], ['使わない', 'つかわない']] },
+    { id: 'wish', q: '6. こう なったら、もっと つかいたい（いくつでも）', none: 'このままでいい',
+      o: [['曲や体操がほしい', 'きょくや たいそうが ほしい'], ['キャラの声かけをもっと', 'キャラの こえかけを もっと'], ['文字を減らしてほしい', 'もじを へらして ほしい'], ['お知らせがほしい', 'おしらせが ほしい'], ['仲間とつながりたい', 'なかまと つながりたい'], ['このままでいい', 'この ままで いい']] },
+    { id: 'ok', one: true, q: 'さいごに：この かんそうを、なまえを ださずに コンテストの おうぼ しょるいに つかっても いいですか？',
+      o: [['いい', 'いい'], ['使わないで', 'つかわないで']] },
+    { id: 'age', one: true, q: 'かいても いいなら：{年代|ねんだい}',
+      o: [['10代', '10{代|だい}'], ['20代', '20{代|だい}'], ['30代', '30{代|だい}'], ['40代', '40{代|だい}'], ['50代', '50{代|だい}'], ['60代', '60{代|だい}'], ['70代以上', '70{代|だい} いじょう']] },
+    { id: 'role', one: true, q: 'かいても いいなら：いまの すごしかた',
+      o: [['働いている', 'はたらいて いる'], ['B型・A型などに通っている', 'B{型|がた}・A{型|がた}などに かよって いる'], ['家にいることが多い', '{家|いえ}に いる ことが おおい'], ['学生', 'がくせい'], ['その他', 'そのほか']] }
+  ];
+  function fbQHTML(q) {
+    var type = q.one ? 'radio' : 'checkbox';
+    return '<fieldset class="fb-q"><legend class="fb-label yasashii">' + rb(q.q) + '</legend><div class="fb-choices">' +
+      q.o.map(function (o, i) {
+        return '<label><input type="' + type + '" name="fb-' + q.id + '" id="fb-' + q.id + '-' + i + '" value="' + esc(o[0]) + '"' +
+          (q.none === o[0] ? ' data-none="1"' : '') + '><span>' + rb(o[1]) + '</span></label>';
+      }).join('') + '</div></fieldset>';
+  }
   function fbField(id) { var el = document.getElementById('fb-' + id); return el ? el.value.trim() : ''; }
   function fbPick(name) { var el = document.querySelector('input[name="fb-' + name + '"]:checked'); return el ? el.value : ''; }
+  function fbPicks(name) {
+    return Array.prototype.map.call(document.querySelectorAll('input[name="fb-' + name + '"]:checked'), function (el) { return el.value; });
+  }
+  function fbJoin(v) { return Array.isArray(v) ? (v.length ? v.join('、') : '—') : (v || '—'); }
   function fbText() {
-    var q4 = fbPick('q4'), why = fbField('q4r');
     var lines = [
       '【ふらりランタンの感想】',
-      '1. 何日くらい、どんなときに使ったか：' + (fbField('q1') || '—'),
-      '2. わかりにくかった・使いにくかったところ：' + (fbField('q2') || '—'),
-      '3. 気持ちや暮らしの変化：' + (fbField('q3') || '—'),
-      '4. これからも使いたいか：' + (q4 || '—') + (why ? '（理由：' + why + '）' : ''),
-      '5. ここが変わったら、もっと使いたい：' + (fbField('q5') || '—'),
+      '1. 使った日数：' + fbJoin(fbPick('days')),
+      '2. 使ったとき：' + fbJoin(fbPicks('when')),
+      '3. わかりにくかったところ：' + fbJoin(fbPicks('hard')),
+      '4. 使ってみて：' + fbJoin(fbPicks('feel')),
+      '5. これからも使いたいか：' + fbJoin(fbPick('again')),
+      '6. こうなったら、もっと使いたい：' + fbJoin(fbPicks('wish')),
+      '・ひとこと：' + (fbField('note') || '—'),
       '・名前を出さずに応募書類に使ってよいか：' + (fbPick('ok') || '未回答'),
-      '・年代・立場：' + (fbField('who') || '—')
+      '・年代・すごし方：' + ([fbPick('age'), fbPick('role')].filter(Boolean).join('／') || '—')
     ];
     var st = document.getElementById('fb-stats');
     if (st && st.checked) {
@@ -1413,23 +1416,34 @@ a.small-btn { display: inline-flex; align-items: center; justify-content: center
     $('#fb-line').href = 'https://line.me/R/share?text=' + encodeURIComponent(text);
   }
   function collectFb() {
-    FB_TEXTS.forEach(function (id) { fb[id] = fbField(id); });
-    fb.q4 = fbPick('q4');
-    fb.ok = fbPick('ok');
+    var picks = {};
+    FB_QS.forEach(function (q) { picks[q.id] = q.one ? fbPick(q.id) : fbPicks(q.id); });
+    fb.picks = picks;
+    fb.note = fbField('note');
     fb.stats = $('#fb-stats').checked;
     clearTimeout(fbTimer);
     fbTimer = setTimeout(saveFb, 400);
   }
+  // 「とくに なし」を えらんだら ほかを はずし、ほかを えらんだら「とくに なし」を はずす
+  function fbExclusive(input) {
+    if (!input || input.type !== 'checkbox' || !input.checked || input.name.indexOf('fb-') !== 0) return;
+    Array.prototype.forEach.call(document.querySelectorAll('input[name="' + input.name + '"]'), function (el) {
+      if (el === input) return;
+      if (input.dataset.none || el.dataset.none) el.checked = false;
+    });
+  }
   function restoreFb() {
-    FB_TEXTS.forEach(function (id) {
-      var el = document.getElementById('fb-' + id);
-      if (el && typeof fb[id] === 'string') el.value = fb[id];
+    $('#fb-qs').innerHTML = FB_QS.map(fbQHTML).join('');
+    var picks = isObj(fb.picks) ? fb.picks : {};
+    FB_QS.forEach(function (q) {
+      var v = picks[q.id];
+      Array.prototype.forEach.call(document.querySelectorAll('input[name="fb-' + q.id + '"]'), function (el) {
+        el.checked = Array.isArray(v) ? v.indexOf(el.value) >= 0 : el.value === v;
+      });
     });
-    ['q4', 'ok'].forEach(function (name) {
-      Array.prototype.forEach.call(document.querySelectorAll('input[name="fb-' + name + '"]'), function (el) { el.checked = el.value === fb[name]; });
-    });
+    if (typeof fb.note === 'string') $('#fb-note').value = fb.note;
     if (typeof fb.stats === 'boolean') $('#fb-stats').checked = fb.stats;
-    $('#fb-say').innerHTML = sayHTML('mone', 'ダメ{出|だ}しも だーいせいかい！ あなたの こえで、ランタンが もっと よくなるんだよ。', { small: true });
+    $('#fb-say').innerHTML = sayHTML('mone', 'ボタンを えらぶ だけで だいじょうぶ！ ダメ{出|だ}しも だーいせいかい！', { small: true });
     renderFb();
   }
   function markFbSent() {
@@ -2058,7 +2072,7 @@ a.small-btn { display: inline-flex; align-items: center; justify-content: center
   $('#hero-duo').innerHTML = avatarHTML('nene') + avatarHTML('mone') + '<span>あんない：ミニねね・ミニもね</span>';
   var fbForm = $('#fb-form');
   fbForm.addEventListener('input', function () { collectFb(); renderFb(); });
-  fbForm.addEventListener('change', function () { collectFb(); renderFb(); });
+  fbForm.addEventListener('change', function (e) { fbExclusive(e.target); collectFb(); renderFb(); });
   fbForm.addEventListener('submit', function (e) { e.preventDefault(); });
   restoreFb();
   renderAll();
