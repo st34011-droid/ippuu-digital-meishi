@@ -13,7 +13,7 @@ window.LANTERN_CONFIG = {
   email: "",     // メールアドレス
   guideUrl: "",  // 使い方ガイド（1枚）のURL
   sessions: [],  // Zoom説明会（例: [{ label: "11月4日（水）19:30〜19:50", url: "https://zoom.us/j/xxxx" }]）
-  sheetUrl: "",  // アクセスを数える先のURL（道具箱スクリプトを「ウェブアプリ」にしたときの …/exec のURL。空なら数えない）
+  sheetUrl: "https://script.google.com/macros/s/AKfycbwmLlh9AEi5FiwB5Xh8AKd3cIpjGfsJcUfjOkpIEwCCBEe5kBnSA94EJOuyvcY06sIX/exec",  // アクセスを数える先のURL（道具箱スクリプトを「ウェブアプリ」にしたときの …/exec のURL。空なら数えない）
   ga4Id: ""      // Googleアナリティクス4を使うときだけ（例: "G-XXXXXXXXXX"）。空なら使わない
 };
 </script>
@@ -497,7 +497,7 @@ blockquote { padding: 0.8rem 1rem; background: var(--accent-tint); border-radius
     <p><b>長谷川 一弘</b>（はせがわ かずひろ）</p>
     <p>一風デザインラボ 所長<br>北海道津別町<br>元 津別町地域おこし協力隊</p>
     <p><a href="https://ippuu-design-lab.com/" target="_blank" rel="noopener">ippuu-design-lab.com</a></p>
-    <p class="cap">更新：2026年10月23日（試作）</p>
+    <p class="cap">更新：2026年10月29日（試作）</p>
   </div>
 </footer>
 
@@ -547,7 +547,7 @@ blockquote { padding: 0.8rem 1rem; background: var(--accent-tint); border-radius
   // sheetUrl か ga4Id が入っているときだけ動きます。空のままなら、何も送りません。
   // 数えるのは3つだけ：「ページを開いた」「ためしてみるを押した」「感想ボタンを押した」。
   // 1回の訪問（1つのタブ）につき、それぞれ1回まで。QRのURLの ?c=sha / ?c=hw で、どこから来たかも数えます。
-  var VER = "2026-10-23a"; // ページを直したら、ここも書きかえる（直す前と後を比べるため）
+  var VER = "2026-10-29a"; // ページを直したら、ここも書きかえる（直す前と後を比べるため）
   (function startCounting() {
     var nav = window.navigator || {};
     var sheetOk = /^https:\/\/script\.google\.com\/(a\/[\w.-]+\/)?macros\/s\/[\w-]+\/exec$/.test(CONFIG.sheetUrl || "");
