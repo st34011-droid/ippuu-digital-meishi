@@ -8,7 +8,7 @@
 <script>
 /* ===== ここだけ書きかえれば、ページに出ます（空の項目は「準備中」と出ます） ===== */
 window.LANTERN_CONFIG = {
-  formUrl: "",   // 感想フォームのURL（例: "https://forms.gle/xxxx"）
+  formUrl: "https://docs.google.com/forms/d/e/1FAIpQLSc6XCBm6-nvFwtZOqoYPXC6uReGQUorwB5tkakT2dTCgEPNJw/viewform",   // 感想フォームのURL（例: "https://forms.gle/xxxx"）
   phone: "",     // 電話番号（例: "0000-00-0000"）
   email: "",     // メールアドレス
   guideUrl: "",  // 使い方ガイド（1枚）のURL
@@ -547,7 +547,7 @@ blockquote { padding: 0.8rem 1rem; background: var(--accent-tint); border-radius
   // sheetUrl か ga4Id が入っているときだけ動きます。空のままなら、何も送りません。
   // 数えるのは3つだけ：「ページを開いた」「ためしてみるを押した」「感想ボタンを押した」。
   // 1回の訪問（1つのタブ）につき、それぞれ1回まで。QRのURLの ?c=sha / ?c=hw で、どこから来たかも数えます。
-  var VER = "2026-10-29a"; // ページを直したら、ここも書きかえる（直す前と後を比べるため）
+  var VER = "2026-10-29b"; // ページを直したら、ここも書きかえる（直す前と後を比べるため）
   (function startCounting() {
     var nav = window.navigator || {};
     var sheetOk = /^https:\/\/script\.google\.com\/(a\/[\w.-]+\/)?macros\/s\/[\w-]+\/exec$/.test(CONFIG.sheetUrl || "");
