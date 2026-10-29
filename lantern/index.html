@@ -541,6 +541,7 @@ h2, h3 { text-wrap: balance; }
 .fb .fb-preview { min-height: 12rem; font-family: inherit; font-size: .88rem; line-height: 1.7; word-break: normal; overflow-wrap: anywhere; white-space: pre-wrap; }
 a.small-btn { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
 .fb-msg { margin: 0; font-weight: 700; color: var(--ok-ink); }
+.fb-msg.bad { color: var(--bad-ink); }
 .fb-msg:empty { display: none; }
 
 /* きろくの保存 */
@@ -835,17 +836,21 @@ a.small-btn { display: inline-flex; align-items: center; justify-content: center
           <label class="fb-label yasashii" for="fb-note">ほかに なにか あれば（じゆうに。こえで <ruby>入力<rt>にゅうりょく</rt></ruby>しても OK）</label>
           <textarea class="fb-text" id="fb-note" rows="3"></textarea>
         </div>
+        <div class="fb-q">
+          <label class="fb-label yasashii" for="fb-honest">しょうじきに、いまいちだった ところ（あれば。きびしい こえほど たすかります）</label>
+          <textarea class="fb-text" id="fb-honest" rows="3"></textarea>
+        </div>
         <label class="fb-check yasashii" for="fb-stats"><input type="checkbox" id="fb-stats" checked><span>つかった きろくの かず（きろくした <ruby>日<rt>ひ</rt></ruby>・<ruby>灯<rt>あか</rt></ruby>りの ごうけい・クリアした へや）も いっしょに おくる</span></label>
         <div class="fb-q">
           <p class="fb-sub yasashii" id="fb-prev-h">おくる ぶん（ここに でている ものだけが とどきます）</p>
           <textarea class="code-area fb-preview" id="fb-preview" readonly aria-labelledby="fb-prev-h"></textarea>
         </div>
         <div class="backup-row">
-          <a class="small-btn" id="fb-line" href="https://line.me/R/share?text=" target="_blank" rel="noopener">LINEで おくる</a>
+          <button type="button" class="small-btn" id="fb-box" hidden>めやすばこに いれる</button>
           <button type="button" class="small-btn ghost" id="fb-share">ほかの ほうほうで おくる</button>
           <button type="button" class="small-btn ghost" id="fb-copy">コピーする</button>
         </div>
-        <p class="fb-sub yasashii">さそって くれた ひとに おくってね。なまえや びょうきの ことは ききません。あなたが おくった ときだけ とどきます。</p>
+        <p class="fb-sub yasashii" id="fb-box-note">なまえや びょうきの ことは ききません。あなたが おくった ときだけ とどきます。</p>
         <p class="fb-msg" id="fb-msg" aria-live="polite"></p>
       </form>
     </section>
@@ -942,6 +947,10 @@ a.small-btn { display: inline-flex; align-items: center; justify-content: center
 <script>
 (function () {
   'use strict';
+
+  // ===== 目安箱（かんそうの おくりさき）=====
+  // 道具箱スクリプトを「ウェブアプリ」にしたときの …/exec のURLを、ここに入れる。空のままなら「じゅんびちゅう」と出る
+  var MEYASU_URL = '';
 
   // ===== レッスンの中身（3クラス × 9レベル。1レベル＝1階＝3へや） =====
   var SRC = {
@@ -1366,12 +1375,14 @@ a.small-btn { display: inline-flex; align-items: center; justify-content: center
       o: [['使いたい', 'つかいたい'], ['どちらでもない', 'どちらでもない'], ['使わない', 'つかわない']] },
     { id: 'wish', q: '6. こう なったら、もっと つかいたい（いくつでも）', none: 'このままでいい',
       o: [['曲や体操がほしい', 'きょくや たいそうが ほしい'], ['キャラの声かけをもっと', 'キャラの こえかけを もっと'], ['文字を減らしてほしい', 'もじを へらして ほしい'], ['お知らせがほしい', 'おしらせが ほしい'], ['仲間とつながりたい', 'なかまと つながりたい'], ['このままでいい', 'この ままで いい']] },
+    { id: 'where', one: true, q: 'この アプリを、どこで しりましたか？',
+      o: [['社会福祉協議会・相談窓口のチラシ', 'しゃきょう・そうだん まどぐちの チラシ'], ['ハローワークのチラシ', 'ハローワークの チラシ'], ['支援員さん・相談員さんの紹介', 'しえんいんさん・そうだんいんさんの しょうかい'], ['Zoom説明会', 'Zoom せつめいかい'], ['知り合いの紹介', 'しりあいの しょうかい'], ['その他', 'そのほか']] },
     { id: 'ok', one: true, q: 'さいごに：この かんそうを、なまえを ださずに コンテストの おうぼ しょるいに つかっても いいですか？',
       o: [['いい', 'いい'], ['使わないで', 'つかわないで']] },
     { id: 'age', one: true, q: 'かいても いいなら：{年代|ねんだい}',
       o: [['10代', '10{代|だい}'], ['20代', '20{代|だい}'], ['30代', '30{代|だい}'], ['40代', '40{代|だい}'], ['50代', '50{代|だい}'], ['60代', '60{代|だい}'], ['70代以上', '70{代|だい} いじょう']] },
     { id: 'role', one: true, q: 'かいても いいなら：いまの すごしかた',
-      o: [['働いている', 'はたらいて いる'], ['B型・A型などに通っている', 'B{型|がた}・A{型|がた}などに かよって いる'], ['家にいることが多い', '{家|いえ}に いる ことが おおい'], ['学生', 'がくせい'], ['その他', 'そのほか']] }
+      o: [['仕事を探している', 'しごとを さがして いる'], ['働いている', 'はたらいて いる'], ['B型・A型などに通っている', 'B{型|がた}・A{型|がた}などに かよって いる'], ['家にいることが多い', '{家|いえ}に いる ことが おおい'], ['学生', 'がくせい'], ['その他', 'そのほか']] }
   ];
   function fbQHTML(q) {
     var type = q.one ? 'radio' : 'checkbox';
@@ -1397,29 +1408,32 @@ a.small-btn { display: inline-flex; align-items: center; justify-content: center
       '5. これからも使いたいか：' + fbJoin(fbPick('again')),
       '6. こうなったら、もっと使いたい：' + fbJoin(fbPicks('wish')),
       '・ひとこと：' + (fbField('note') || '—'),
+      '・正直に、いまいちだったところ：' + (fbField('honest') || '—'),
+      '・どこで知ったか：' + (fbPick('where') || '—'),
       '・名前を出さずに応募書類に使ってよいか：' + (fbPick('ok') || '未回答'),
       '・年代・すごし方：' + ([fbPick('age'), fbPick('role')].filter(Boolean).join('／') || '—')
     ];
-    var st = document.getElementById('fb-stats');
-    if (st && st.checked) {
-      var cleared = 0, all = 0;
-      FLOORS.forEach(function (f) { cleared += clearedIn(f); all += f.rooms.length; });
-      lines.push('・使った記録：記録した日 ' + Object.keys(state.days).length + '日／灯りの合計 ' + totalLights() + 'こ／クリアした部屋 ' + cleared + ' / ' + all);
-    }
+    if (fbStatsOn()) lines.push('・' + fbStatsLine());
     return lines.join('\n');
+  }
+  function fbStatsOn() { var st = document.getElementById('fb-stats'); return !!(st && st.checked); }
+  function fbStatsLine() {
+    var cleared = 0, all = 0;
+    FLOORS.forEach(function (f) { cleared += clearedIn(f); all += f.rooms.length; });
+    return '使った記録：記録した日 ' + Object.keys(state.days).length + '日／灯りの合計 ' + totalLights() + 'こ／クリアした部屋 ' + cleared + ' / ' + all;
   }
   function renderFb() {
     var pv = document.getElementById('fb-preview');
     if (!pv) return;
-    var text = fbText();
-    pv.value = text;
-    $('#fb-line').href = 'https://line.me/R/share?text=' + encodeURIComponent(text);
+    pv.value = fbText();
+    renderBox();
   }
   function collectFb() {
     var picks = {};
     FB_QS.forEach(function (q) { picks[q.id] = q.one ? fbPick(q.id) : fbPicks(q.id); });
     fb.picks = picks;
     fb.note = fbField('note');
+    fb.honest = fbField('honest');
     fb.stats = $('#fb-stats').checked;
     clearTimeout(fbTimer);
     fbTimer = setTimeout(saveFb, 400);
@@ -1442,6 +1456,7 @@ a.small-btn { display: inline-flex; align-items: center; justify-content: center
       });
     });
     if (typeof fb.note === 'string') $('#fb-note').value = fb.note;
+    if (typeof fb.honest === 'string') $('#fb-honest').value = fb.honest;
     if (typeof fb.stats === 'boolean') $('#fb-stats').checked = fb.stats;
     $('#fb-say').innerHTML = sayHTML('mone', 'ボタンを えらぶ だけで だいじょうぶ！ ダメ{出|だ}しも だーいせいかい！', { small: true });
     renderFb();
@@ -1450,8 +1465,79 @@ a.small-btn { display: inline-flex; align-items: center; justify-content: center
     fb.sentAt = Date.now();
     saveFb();
     renderNudge();
+    $('#fb-msg').className = 'fb-msg';
     $('#fb-msg').textContent = 'ありがとう！ いただいた かんそうで、ランタンを よくして いきます。';
     toast('かんそう ありがとう！ だーいせいかい！', 'mone');
+  }
+
+  // ===== 目安箱：えらんだ こたえだけを、つくった 人に とどける（なまえは おくらない。おくるのは 本人が おした ときだけ） =====
+  function boxOk() { return /^https:\/\/script\.google\.com\/(a\/[\w.-]+\/)?macros\/s\/[\w-]+\/exec$/.test(MEYASU_URL); }
+  function renderBox() {
+    var btn = document.getElementById('fb-box');
+    var note = document.getElementById('fb-box-note');
+    var ok = boxOk();
+    if (btn) btn.hidden = !ok;
+    if (note) {
+      note.innerHTML = rb(ok
+        ? 'めやすばこに いれると、つくった {人|ひと}（{一風|いっぷう}ラボ）に とどきます。なまえや びょうきの ことは ききません。とどくのは、あなたが いれた ときだけです。'
+        : 'めやすばこは じゅんびちゅう です。いまは コピーして、さそって くれた {人|ひと}に おくってね。なまえや びょうきの ことは ききません。');
+    }
+  }
+  function boxPayload() {
+    var p = { kind: 'kansou', v: 1 };
+    FB_QS.forEach(function (q) { p[q.id] = q.one ? fbPick(q.id) : fbPicks(q.id); });
+    p.note = fbField('note');
+    p.honest = fbField('honest');
+    p.paste = fbStatsOn() ? fbStatsLine() : '';
+    return p;
+  }
+  // おなじ ないようを 2かい おしても、1かいぶんに なるように（目安箱が この しるしで 見わける）
+  function hashStr(s) {
+    var h = 5381;
+    for (var i = 0; i < s.length; i++) { h = ((h << 5) + h + s.charCodeAt(i)) | 0; }
+    return (h >>> 0).toString(36);
+  }
+  function fbNote(text, bad) {
+    var m = $('#fb-msg');
+    m.className = 'fb-msg' + (bad ? ' bad' : '');
+    m.textContent = text;
+  }
+  function sendToBox(btn) {
+    collectFb(); saveFb(); renderFb();
+    if (!boxOk() || btn.disabled) return;
+    if (!fbPick('ok')) {
+      fbNote('さいごの「つかっても いいですか？」を えらんでから、いれてね。', true);
+      var first = document.querySelector('input[name="fb-ok"]');
+      if (first) first.focus();
+      return;
+    }
+    var p = boxPayload();
+    p.id = 'k' + hashStr(JSON.stringify(p));
+    var orig = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'いれて います…';
+    fbNote('', false);
+    function done(ok) {
+      btn.disabled = false;
+      btn.textContent = orig;
+      if (ok) {
+        markFbSent();
+        fbNote('めやすばこに いれました。ありがとう！ いただいた かんそうで、ランタンを よくして いきます。', false);
+      } else {
+        fbNote('いま、いれられませんでした。すこし あとで もういちど おすか、コピーして おくってね。', true);
+      }
+    }
+    try {
+      fetch(MEYASU_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(p),
+        credentials: 'omit',
+        referrerPolicy: 'no-referrer',
+        redirect: 'follow'
+      }).then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (j) { done(!!(j && j.ok)); }, function () { done(false); });
+    } catch (e) { done(false); }
   }
   // 3日 きろくしたら、ミニもねが そっと きく（「また こんど」で 3日 おやすみ）
   function renderNudge() {
@@ -1994,7 +2080,7 @@ a.small-btn { display: inline-flex; align-items: center; justify-content: center
       if (g) { g.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
       return;
     }
-    if (t.id === 'fb-line') { collectFb(); saveFb(); renderFb(); markFbSent(); return; }
+    if (t.id === 'fb-box') { sendToBox(t); return; }
     if (t.id === 'fb-share') {
       var fbMsgText = fbText();
       if (navigator.share) {
@@ -2006,7 +2092,7 @@ a.small-btn { display: inline-flex; align-items: center; justify-content: center
       }
       return;
     }
-    if (t.id === 'fb-copy') { copyText(fbText(), t, 'コピーしました'); $('#fb-msg').textContent = 'LINE や メールに はりつけて、おくってね。'; return; }
+    if (t.id === 'fb-copy') { copyText(fbText(), t, 'コピーしました'); fbNote('LINE や メールに はりつけて、おくってね。', false); return; }
     if (t.id === 'fb-later') { fb.hideUntil = Date.now() + 3 * 86400000; saveFb(); renderNudge(); return; }
     if (t.id === 'read-btn') { speakRoom(); return; }
     if (t.id === 'copy-dial') { copyText('0570-064-556', t, 'コピーしました'); return; }
