@@ -568,6 +568,11 @@ a.small-btn { display: inline-flex; align-items: center; justify-content: center
 .confirm p { font-weight: 700; color: var(--warn-ink); }
 .msg-ok { color: var(--ok-ink); font-weight: 700; }
 .msg-bad { color: var(--bad-ink); font-weight: 700; }
+.csv-box { margin-top: .8rem; display: grid; gap: .7rem; }
+.csv-box p { margin: 0; font-size: .95rem; }
+.csv-box p:empty { display: none; }
+.csv-box .csv-note { color: var(--muted); font-size: .88rem; }
+.csv-box .csv-area { min-height: 9rem; white-space: pre; word-break: normal; overflow-x: auto; }
 
 /* 出典 */
 .sources { padding: 1rem clamp(16px, 4.5vw, 32px) 1.4rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .85rem; line-height: 1.8; }
@@ -883,6 +888,16 @@ a.small-btn { display: inline-flex; align-items: center; justify-content: center
     <section class="sec store" aria-labelledby="store-h">
       <h2 class="sec-h" id="store-h">きろくの ほぞん</h2>
       <p class="store-where yasashii" id="store-where"></p>
+      <div class="csv-box">
+        <p class="yasashii">きろくを ひょう（CSV）の ファイルに して、この <ruby>端末<rt>たんまつ</rt></ruby>に のこせます。ファイルは どこにも おくられません。だれに <ruby>見<rt>み</rt></ruby>せるかは、あなたが <ruby>決<rt>き</rt></ruby>めて いい。</p>
+        <div class="backup-row">
+          <button type="button" class="small-btn" id="csv-btn">ひょう（CSV）に して ほぞん</button>
+          <button type="button" class="small-btn ghost" id="csv-copy" hidden>もじを コピー</button>
+        </div>
+        <textarea class="code-area csv-area" id="csv-text" readonly hidden aria-label="ひょうの もじ（CSV）"></textarea>
+        <p id="csv-msg" aria-live="polite"></p>
+        <p class="csv-note yasashii">CSVは エクセルや スプレッドシートで ひらける「<ruby>見<rt>み</rt></ruby>る ため」の ファイルです。1<ruby>日<rt>にち</rt></ruby>は <ruby>朝<rt>あさ</rt></ruby>4<ruby>時<rt>じ</rt></ruby>から かぞえます。<ruby>機種<rt>きしゅ</rt></ruby>を かえる ときは、<ruby>下<rt>した</rt></ruby>の「きろくの ひっこし」を つかってね。</p>
+      </div>
       <details class="backup" id="backup">
         <summary>きろくの ひっこし・やりなおし</summary>
         <div class="backup-body">
@@ -2061,6 +2076,97 @@ a.small-btn { display: inline-flex; align-items: center; justify-content: center
     m.innerHTML = rb(text);
   }
 
+  // ひょう（CSV）：1ぎょう＝1にち。この端末の なかで ファイルを つくるだけで、どこにも おくらない
+  // アプリが じっさいに きろくして いる ものだけを、アプリの ことばの ままで ならべる
+  var CSV_COLS = [
+    ['wake', '起きた'], ['light', '朝の光を浴びた'], ['meal', 'ごはんを食べた'],
+    ['move', '少し体を動かした'], ['bath', 'お風呂かシャワー'], ['night', 'ねるじゅんびをした']
+  ];
+  function csvCell(v) {
+    var s = (v === null || v === undefined) ? '' : String(v);
+    return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  }
+  function csvTime(hm) {
+    var p = String(hm).split(':');
+    return pad(Number(p[0])) + ':' + p[1];
+  }
+  function buildCsv() {
+    var rows = [['日付', '曜日'].concat(CSV_COLS.map(function (c) { return c[1]; }), ['休んだ日', '灯りの数'])];
+    Object.keys(state.days).sort().forEach(function (key) {
+      var rec = state.days[key];
+      var n = countDay(rec);
+      if (!n) return;
+      var p = key.split('-');
+      var wd = WD[new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2])).getDay()];
+      rows.push([key, wd].concat(
+        CSV_COLS.map(function (c) { return rec[c[0]] ? csvTime(rec[c[0]]) : ''; }),
+        [rec.rest ? '○' : '', n]
+      ));
+    });
+    return { days: rows.length - 1, text: rows.map(function (r) { return r.map(csvCell).join(','); }).join('\r\n') + '\r\n' };
+  }
+  function csvMsg(text, ok) {
+    var m = $('#csv-msg');
+    m.className = ok ? 'msg-ok' : 'msg-bad';
+    m.innerHTML = rb(text);
+  }
+  // 先頭の BOM（目に見えない1文字）は、エクセルが 日本語を 正しく ひらく ための もの
+  var CSV_BOM = String.fromCharCode(0xFEFF);
+  // ふつうの ブラウザ：そのまま ダウンロード
+  function csvBlobSave(text, name) {
+    try {
+      var url = URL.createObjectURL(new Blob([CSV_BOM + text], { type: 'text/csv;charset=utf-8' }));
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = name;
+      a.hidden = true;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
+      return true;
+    } catch (e) { return false; }
+  }
+  // claude.ai の なか：ブラウザの ダウンロードは ゆるされないので、claude.ai の「ほぞん」を つかう（かくにんが 出る）
+  // こたえ：'saved' ほぞんした／'declined' ほぞんしなかった／'busy' かくにんちゅう／'failed' できなかった／null この ばしょには ない
+  function csvPlatformSave(text, name) {
+    var c = window.claude;
+    if (!c || typeof c.use !== 'function') return Promise.resolve(null);
+    return Promise.resolve().then(function () { return c.use('downloads'); }).then(function (d) {
+      if (!d || typeof d.save !== 'function') return null;
+      return d.save({ filename: name, data: CSV_BOM + text }).then(function () { return 'saved'; }, function (e) {
+        var code = e && e.code;
+        return code === 'declined' ? 'declined' : (code === 'rate_limited' ? 'busy' : 'failed');
+      });
+    }).catch(function () { return null; });
+  }
+  function saveCsv() {
+    var csv = buildCsv();
+    var area = $('#csv-text');
+    var copyBtn = $('#csv-copy');
+    if (!csv.days) {
+      area.hidden = true;
+      copyBtn.hidden = true;
+      csvMsg('まだ きろくが ありません。「{起|お}きた」など ひとつ おしてから、また {来|き}てね。', false);
+      return;
+    }
+    var name = 'furari-lantern-kiroku-' + keyOf(new Date()).replace(/-/g, '') + '.csv';
+    area.value = csv.text;
+    area.hidden = false;
+    copyBtn.hidden = false;
+    csvPlatformSave(csv.text, name).then(function (r) {
+      if (r === 'busy') return;
+      if (r === 'saved') { csvMsg('ほぞんしました（' + csv.days + '{日|にち}ぶん）。なまえ：' + name, true); return; }
+      if (r === 'declined') { csvMsg('ほぞんは やめました。ひつような ときは、{下|した}の もじを コピーして ください。', true); return; }
+      if (r === 'failed') { csvMsg('ほぞんが できませんでした。{下|した}の もじを コピーして、メモや メールに はりつけて ください。', false); return; }
+      var made = csvBlobSave(csv.text, name);
+      csvMsg(made
+        ? 'ファイルを つくりました（' + csv.days + '{日|にち}ぶん）。なまえ：' + name + ' ／ ダウンロードが はじまらない ときは、{下|した}の もじを コピーして ください。'
+        : 'ファイルを つくれませんでした。{下|した}の もじを コピーして、メモや メールに はりつけて ください。', made);
+    });
+  }
+
+
   document.addEventListener('click', function (e) {
     var t = e.target.closest ? e.target.closest('button, a') : null;
     if (!t) return;
@@ -2096,6 +2202,8 @@ a.small-btn { display: inline-flex; align-items: center; justify-content: center
     if (t.id === 'fb-later') { fb.hideUntil = Date.now() + 3 * 86400000; saveFb(); renderNudge(); return; }
     if (t.id === 'read-btn') { speakRoom(); return; }
     if (t.id === 'copy-dial') { copyText('0570-064-556', t, 'コピーしました'); return; }
+    if (t.id === 'csv-btn') { saveCsv(); return; }
+    if (t.id === 'csv-copy') { var csvArea = $('#csv-text'); csvArea.focus(); csvArea.select(); copyText(csvArea.value, t, 'コピーしました'); return; }
     if (t.id === 'export-btn') {
       var area = $('#export-code');
       area.value = encodeState();
