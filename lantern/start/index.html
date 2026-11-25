@@ -187,6 +187,8 @@ h1 {
 }
 .btn-hero { width: 100%; max-width: 22rem; background: var(--btn-hero-bg); color: var(--btn-hero-fg); box-shadow: 0 6px 20px rgba(18, 14, 58, 0.25); }
 .btn-main { background: var(--accent-fill); color: var(--on-accent); }
+.btn-line { background: var(--surface); color: var(--accent-ink); border: 2px solid var(--accent-fill); }
+.kami { gap: 0.5rem; }
 
 /* 本文 */
 main .in { display: flex; flex-direction: column; gap: 2.9rem; padding-block: 2.5rem 3rem; }
@@ -421,6 +423,12 @@ blockquote { padding: 0.8rem 1rem; background: var(--accent-tint); border-radius
     </li>
   </ol>
   <p>記録は、スマホの中だけに保存されます。ブラウザのデータを消したり、機種を変えたりすると、記録も消えます。</p>
+  <div class="sub kami" id="kami">
+    <h3>スマホを使わない方へ</h3>
+    <p>同じしくみを、紙のシートでも使えます。できたら、ひとつ ぬるだけです。</p>
+    <a class="btn btn-line" href="furari-lantern-kami-a4.pdf" target="_blank" rel="noopener">紙のシートを開く（PDF）</a>
+    <p class="cap">A4で2まいです。白黒・片面で印刷してください。感想は、2まいめのカードを シートをくれた人にわたすか、下の感想フォームから送れます。</p>
+  </div>
 </section>
 
 <section aria-labelledby="h-voice">
@@ -430,7 +438,7 @@ blockquote { padding: 0.8rem 1rem; background: var(--accent-tint); border-radius
   <a id="form-btn" class="btn btn-main" href="#" target="_blank" rel="noopener" hidden>感想を送る（お名前はいりません）</a>
   <p id="form-soon" class="soon">感想フォームは、準備中です。</p>
   <p class="cap">アプリの中の「かんそうを おくる」からも、送れます。</p>
-  <p class="cap">お名前や病名は、書かなくて大丈夫です。感想は、お名前を出さずに、全国のコンテスト（しのはら財団「ケアテック・イノベーション・コンテスト2026」）の応募書類に使わせてください。使ってよいかどうかは、フォームの最後で選べます。応募するだけで、受賞や採用が決まっているわけではありません。</p>
+  <p class="cap">お名前や病名は、書かなくて大丈夫です。感想は、お名前を出さずに、アプリをよくするためと、これからのコンテストなどの応募書類に使わせてください。使ってよいかどうかは、フォームの最後で選べます。</p>
 </section>
 
 <section class="staff" aria-labelledby="h-staff">
@@ -440,6 +448,7 @@ blockquote { padding: 0.8rem 1rem; background: var(--accent-tint); border-radius
   <ul class="list">
     <li>職員さんが先に触って、感想をくださるだけでも助かります。</li>
     <li>窓口に、チラシを置いていただけると助かります。</li>
+    <li>スマホが苦手な方には、<a href="#kami">紙のシート</a>を印刷してお渡しください。</li>
     <li>ご質問や、説明会のご希望は、下の連絡先までお知らせください。</li>
   </ul>
   <div class="sub">
@@ -497,7 +506,7 @@ blockquote { padding: 0.8rem 1rem; background: var(--accent-tint); border-radius
     <p><b>長谷川 一弘</b>（はせがわ かずひろ）</p>
     <p>一風デザインラボ 所長<br>北海道津別町<br>元 津別町地域おこし協力隊</p>
     <p><a href="https://ippuu-design-lab.com/" target="_blank" rel="noopener">ippuu-design-lab.com</a></p>
-    <p class="cap">更新：2026年10月29日（試作）</p>
+    <p class="cap">更新：2026年11月24日（試作）</p>
   </div>
 </footer>
 
@@ -547,7 +556,7 @@ blockquote { padding: 0.8rem 1rem; background: var(--accent-tint); border-radius
   // sheetUrl か ga4Id が入っているときだけ動きます。空のままなら、何も送りません。
   // 数えるのは3つだけ：「ページを開いた」「ためしてみるを押した」「感想ボタンを押した」。
   // 1回の訪問（1つのタブ）につき、それぞれ1回まで。QRのURLの ?c=sha / ?c=hw で、どこから来たかも数えます。
-  var VER = "2026-10-29c"; // ページを直したら、ここも書きかえる（直す前と後を比べるため）
+  var VER = "2026-11-24a"; // ページを直したら、ここも書きかえる（直す前と後を比べるため）
   (function startCounting() {
     var nav = window.navigator || {};
     var sheetOk = /^https:\/\/script\.google\.com\/(a\/[\w.-]+\/)?macros\/s\/[\w-]+\/exec$/.test(CONFIG.sheetUrl || "");
